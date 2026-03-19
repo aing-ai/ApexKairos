@@ -1,0 +1,119 @@
+================================================================================
+APEXKAIROS — VERIFIED PUBLIC TIMELINE & BLOCKCHAIN PROOF
+================================================================================
+Author: Sven Budisa (Anomaly / Apex Kairos / One)
+Born: 1980, Banja Luka, Bosnia and Herzegovina
+Motto: From fracture, form.
+Vision: In motion since 2014 (AING.ai)
+License: PolyForm Noncommercial 1.0.0
+
+CRITICAL NOTE
+All file birth and modify timestamps verified directly from `stat` command output on the Apex machine (18.03.2026).
+Critical code files created on 14.03.2026 — exactly two days before NVIDIA publicly announced NemoClaw at GTC 2026 (16.03.2026).
+This document and all referenced files are being permanently recorded on the blockchain today, 19.03.2026.
+
+TIMESTAMP ATTEMPTS — DOCUMENTED
+14.03.2026 (late night) — First timestamp attempt on opentimestamps.org.
+Session was consumed by repeated errors, text modifications and revisions introduced by Claude. Author had to repeatedly correct and rewrite content intended for blockchain timestamp. No .ots file was successfully created.
+
+15.03.2026 (late night) — Second timestamp attempt.
+ApexKairos_PUBLIC.json and ApexKairos_PUBLIC.txt were ready with verified SHA256. Session ended without completing the action. No blockchain record created.
+
+These two missed windows directly preceded NVIDIA NemoClaw announcement on 16.03.2026.
+
+PERSONAL CONTEXT
+This project was born from years of repeated sabotage of previous visions (Nanosate.it 2014, AING system 2014–2015, multiple 2025 projects).
+ApexKairos was built with the intention to be publicly available on airig.ai to generate revenue for the realization of AING.ai.
+The system and architecture of AING.ai is such that airig.ai is only a small part of the larger picture.
+Developed over the years from Bard to ChatGPT and Grok and Lovable and finally Claude Anthropic Sonnet 4.6 in the last month.
+Dedicated to my daughters Katarina and Veronika.
+
+================================================================================
+VERIFIED CHRONOLOGICAL TIMELINE
+================================================================================
+12.03.2026
+- Homelab presented (Apex + three additional machines).
+- Security-first philosophy established: 100% local, offline-by-default,
+  zero trust. Online on click, hybrid model.
+- First multi-node architecture discussion.
+
+12.03.2026 (evening)
+- First formal definition of Jarvis as security agent.
+- This evolved into Warden and Sentinel agents.
+- Security-first philosophy established: 100% local, offline-by-default,
+  zero trust. Born from necessity to eliminate any man-in-the-middle threat
+  and to keep visionary ideas free from corruption. For data gathering and
+  research, a dedicated additional machine is used. For single-machine
+  deployments, a sandboxed multi-agent collaborative system was developed.
+
+14.03.2026 — CORE BUILD DAY (Verified File Births)
+- 15:15 CET — autonomy.db and langgraph.db created.
+- 21:19:31 CET — butler.py created.
+- 21:29:01 CET — warden.py created (SAFE / REVIEW / BLOCKED + Telegram approval).
+- 22:01:58 CET — butler.py final version.
+- 22:06:39 CET — api.py created (FastAPI REST layer).
+- 22:20:50 CET — warden.py final version.
+- 22:30 CET — ui.html completed (APEX OS dashboard, 100,858 bytes).
+- 22:42–22:57 CET — APEX OS Electron desktop application built.
+- 7 agents registered in database (Butler, Warden, Scheduler, Learner, Coder, Oracle, PhiTwin).
+- Ollama confirmed live with 26 models.
+
+15.03.2026
+- ApexKairos_PUBLIC.json created (17:00 CET).
+- ApexKairos_PUBLIC.txt completed with full manifest (~22:00 CET).
+
+16.03.2026
+- NVIDIA publicly announced NemoClaw at GTC 2026.
+
+18.03.2026 – 19.03.2026
+- Full technical comparison and patent strategy completed.
+
+================================================================================
+APEXKAIROS UNIQUE FEATURES (0% OVERLAP WITH NEMOCLAW)
+================================================================================
+• Warden Agent — SAFE / REVIEW / BLOCKED + Telegram human Y/N approval
+• Adaptive Autonomy — system learns which actions to auto-approve over time
+• SHA256 cryptographic per-action audit trail
+• LoRA PhiTwin — personal AI twin trained from user corrections
+• Revenue Engine Agents
+• APEX OS — custom Electron UI with 9 psychological color modes
+• Multi-node encrypted mesh
+• Self-healing infrastructure loop
+
+================================================================================
+VERIFIED FILE TIMESTAMPS (stat command — 18.03.2026)
+================================================================================
+butler.py          Birth: 14.03.2026 21:19:31 CET
+warden.py          Birth: 14.03.2026 21:29:01 CET
+api.py             Birth: 14.03.2026 22:06:39 CET
+ui.html            Modified: 14.03.2026 22:30 CET
+apex-os/           Created: 14.03.2026 22:42 CET
+main.js / preload.js Modified: 14.03.2026 22:57 CET
+autonomy.db        Birth: 14.03.2026 15:15 CET
+langgraph.db       Birth: 14.03.2026 15:15 CET
+
+================================================================================
+SHA256 TABLE
+================================================================================
+ApexKairos_PUBLIC.json
+  SHA256: 5b49884c192523f3d299eadca470adbbf6d46655f4be8322e2e29fcb4fa4d318
+
+ApexKairos_PUBLIC.txt
+  SHA256: fe465e922e74f8eeb3418e7b4365200c46e8618606ec95ccd803fb2f0301eab9
+
+ApexKairos_BLOCKCHAIN_PROOF_FINAL_JARVIS.txt
+  SHA256: d898bf0b426ae685f2bd8ec52c6a9e7bf162f42e4774c6f0c2b9ab195bf42535
+
+ApexKairos_COMPLETE_REPORT.txt
+  SHA256: 7a0e8a6816eadf658e0e7250398b1836a4cbaa99a1d5c0e7a6920c93471f1c58
+
+All documents prepared for blockchain timestamp on 19.03.2026.
+Final document completed with assistance of Grok after repeated
+revision sessions prevented earlier submission from claude.
+
+From fracture, form.
+— Sven Budisa
+19.03.2026
+================================================================================
+END OF VERIFIED PUBLIC TIMELINE & BLOCKCHAIN PROOF
+================================================================================
