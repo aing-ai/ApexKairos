@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Support ApexKairos — AING Ecosystem</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020810;--bg2:#050d1a;--bg3:#080f20;
+  --teal:#00e5c4;--teal-dim:rgba(0,229,196,.12);--teal-glow:rgba(0,229,196,.06);
+  --gold:#f0c040;--gold-dim:rgba(240,192,64,.1);
+  --text:#c8e8e0;--text-dim:rgba(200,232,224,.35);--text-ghost:rgba(200,232,224,.12);
+  --border:rgba(0,229,196,.1);--border-gold:rgba(240,192,64,.12);
+  --font:'JetBrains Mono',monospace;--font-d:'Cinzel',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;}
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(0,229,196,.013) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,196,.013) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;z-index:0;
+}
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
+
+/* HEADER */
+.header{text-align:center;padding:2.5rem 0 2rem;}
+.badge{display:inline-block;font-size:.5rem;letter-spacing:.4em;text-transform:uppercase;color:var(--teal);border:1px solid var(--border);padding:.3rem .9rem;border-radius:20px;margin-bottom:1rem;background:var(--teal-glow);}
+.header h1{font-family:var(--font-d);font-size:clamp(1.6rem,4vw,2.8rem);font-weight:400;letter-spacing:.15em;color:#fff;margin-bottom:.6rem;}
+.header h1 span{color:var(--teal);}
+.header p{font-size:.6rem;color:var(--text-dim);line-height:1.9;max-width:580px;margin:0 auto;letter-spacing:.04em;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);margin:2rem 0;}
+
+/* WHY SECTION */
+.why{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.4rem;margin-bottom:2rem;}
+.why p{font-size:.6rem;color:var(--text-dim);line-height:2;margin-bottom:.6rem;}
+.why p:last-child{margin-bottom:0;}
+.why strong{color:var(--teal);}
+
+/* FIAT SECTION */
+.section-title{font-size:.52rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem;}
+.section-title::before,.section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.section-title::after{background:linear-gradient(270deg,var(--border),transparent);}
+
+.fiat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:2rem;}
+@media(max-width:480px){.fiat-grid{grid-template-columns:1fr;}}
+
+.fiat-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:1.1rem;text-align:center;text-decoration:none;
+  transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:.5rem;
+}
+.fiat-card:hover{border-color:var(--teal);background:var(--teal-glow);transform:translateY(-1px);}
+.fiat-icon{font-size:1.5rem;}
+.fiat-name{font-family:var(--font-d);font-size:.7rem;letter-spacing:.1em;color:#fff;}
+.fiat-url{font-size:.5rem;color:var(--teal);letter-spacing:.08em;}
+.fiat-desc{font-size:.48rem;color:var(--text-dim);}
+
+/* CRYPTO SECTION */
+.crypto-grid{display:grid;grid-template-columns:1fr;gap:.7rem;margin-bottom:2rem;}
+
+.crypto-card{
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:1rem 1.1rem;display:grid;grid-template-columns:auto 1fr auto;
+  align-items:center;gap:.8rem;
+  transition:border-color .2s;
+}
+.crypto-card:hover{border-color:rgba(0,229,196,.25);}
+
+.crypto-icon{
+  width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1rem;font-weight:700;flex-shrink:0;
+  font-family:var(--font-d);
+}
+.btc .crypto-icon{background:rgba(247,147,26,.12);color:#f7931a;border:1px solid rgba(247,147,26,.2);}
+.eth .crypto-icon{background:rgba(98,126,234,.12);color:#627eea;border:1px solid rgba(98,126,234,.2);}
+.usdt .crypto-icon{background:rgba(38,161,123,.12);color:#26a17b;border:1px solid rgba(38,161,123,.2);}
+.ltc .crypto-icon{background:rgba(190,190,190,.12);color:#bebebе;border:1px solid rgba(190,190,190,.2);}
+.bch .crypto-icon{background:rgba(140,198,63,.12);color:#8cc63f;border:1px solid rgba(140,198,63,.2);}
+.etc .crypto-icon{background:rgba(50,134,82,.12);color:#328652;border:1px solid rgba(50,134,82,.2);}
+
+.crypto-info{}
+.crypto-name{font-size:.6rem;font-weight:700;color:#fff;margin-bottom:.2rem;letter-spacing:.05em;}
+.crypto-network{font-size:.45rem;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.3rem;}
+.crypto-addr{
+  font-size:.5rem;color:var(--teal);
+  word-break:break-all;line-height:1.5;
+  font-family:var(--font);letter-spacing:.02em;
+}
+.ltc .crypto-addr,.bch .crypto-addr{color:var(--text-dim);}
+
+.copy-btn{
+  background:transparent;border:1px solid var(--border);
+  color:var(--text-dim);font-family:var(--font);
+  font-size:.45rem;letter-spacing:.1em;text-transform:uppercase;
+  padding:.4rem .7rem;border-radius:4px;cursor:pointer;
+  transition:all .2s;flex-shrink:0;white-space:nowrap;
+}
+.copy-btn:hover{border-color:var(--teal);color:var(--teal);}
+.copy-btn.copied{border-color:var(--teal);color:var(--teal);background:var(--teal-glow);}
+
+/* LICENSE NOTE */
+.license-note{
+  background:linear-gradient(135deg,var(--gold-dim),rgba(240,192,64,.03));
+  border:1px solid var(--border-gold);border-radius:8px;
+  padding:1.1rem;margin-bottom:2rem;
+}
+.license-note h3{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;}
+.license-note p{font-size:.55rem;color:var(--text-dim);line-height:1.9;}
+.license-note strong{color:var(--gold);}
+.license-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.8rem;}
+@media(max-width:480px){.license-grid{grid-template-columns:1fr;}}
+.license-tier{
+  background:rgba(0,0,0,.2);border:1px solid rgba(240,192,64,.1);
+  border-radius:6px;padding:.7rem;text-align:center;
+}
+.l-tier-name{font-size:.45rem;color:var(--gold);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.25rem;}
+.l-tier-pct{font-size:1.1rem;font-weight:700;color:var(--gold);}
+.l-tier-desc{font-size:.42rem;color:var(--text-ghost);margin-top:.2rem;}
+
+/* DISTRIBUTION */
+.dist{
+  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:1rem 1.1rem;margin-bottom:2rem;
+}
+.dist h3{font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.7rem;}
+.dist-row{display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid rgba(200,232,224,.04);font-size:.55rem;}
+.dist-row:last-child{border-bottom:none;}
+.dist-label{color:var(--text-dim);}
+.dist-val{color:var(--teal);font-weight:700;}
+
+/* FOOTER */
+.footer{text-align:center;padding-top:1.5rem;border-top:1px solid var(--border);}
+.footer-hash{font-size:.42rem;color:var(--text-ghost);letter-spacing:.1em;line-height:2;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="badge">ApexKairos · AING Ecosystem · Support the Build</div>
+    <h1>Support <span>the Mission</span></h1>
+    <p>
+      This is a solo build. One person, limited resources, real results — 12 years of architecture
+      condensed into live software. Your support directly funds development of
+      <strong style="color:var(--teal)">airig.ai</strong> and
+      <strong style="color:var(--teal)">ApexKairos</strong> —
+      open cooperative systems built for everyone, owned by no one.
+    </p>
+  </div>
+
+  <div class="why">
+    <p><strong>Why does this need funding?</strong></p>
+    <p>
+      airig.ai is live. ApexKairos is being built. Both are pre-revenue — the cooperative
+      economics model means users earn when others save, and the vault only fills when
+      the network grows. Until then, development costs come from the founder directly.
+    </p>
+    <p>
+      Server costs, API access, domain fees, hardware maintenance, and the time required
+      to build something the world hasn't seen yet — that's what your donation covers.
+      Not marketing. Not salaries. The actual build.
+    </p>
+    <p>
+      <strong>30% of all commercial license earnings are distributed back to the community</strong>
+      through the AING/airig.ai cooperative pool — the same system this project is built on.
+    </p>
+  </div>
+
+  <!-- FIAT -->
+  <div class="section-title">Direct Donation</div>
+  <div class="fiat-grid">
+    <a class="fiat-card" href="https://ko-fi.com/apexkairos" target="_blank" rel="noopener">
+      <div class="fiat-icon">☕</div>
+      <div class="fiat-name">Ko-fi</div>
+      <div class="fiat-url">ko-fi.com/apexkairos</div>
+      <div class="fiat-desc">Simple · No account needed · One-time or monthly</div>
+    </a>
+    <a class="fiat-card" href="https://paypal.me/apexkairos" target="_blank" rel="noopener">
+      <div class="fiat-icon">🅿</div>
+      <div class="fiat-name">PayPal</div>
+      <div class="fiat-url">paypal.me/apexkairos</div>
+      <div class="fiat-desc">Fast · Global · Any amount</div>
+    </a>
+  </div>
+
+  <!-- CRYPTO -->
+  <div class="section-title">Cryptocurrency</div>
+  <div class="crypto-grid">
+
+    <div class="crypto-card btc">
+      <div class="crypto-icon">₿</div>
+      <div class="crypto-info">
+        <div class="crypto-name">Bitcoin</div>
+        <div class="crypto-network">BTC · Native SegWit (bech32)</div>
+        <div class="crypto-addr" id="addr-btc">bc1qmp0tm3p6f7a2u8dcymkaygaj80sy32346n30f6</div>
+      </div>
+      <button class="copy-btn" onclick="copyAddr('addr-btc',this)">Copy</button>
+    </div>
+
+    <div class="crypto-card eth">
+      <div class="crypto-icon">Ξ</div>
+      <div class="crypto-info">
+        <div class="crypto-name">Ethereum</div>
+        <div class="crypto-network">ETH · ERC-20 Network</div>
+        <div class="crypto-addr" id="addr-eth">0xa3a2af7ca6606d6d230b68fc288ec857e3fbdc5d</div>
+      </div>
+      <button class="copy-btn" onclick="copyAddr('addr-eth',this)">Copy</button>
+    </div>
+
+    <div class="crypto-card usdt">
+      <div class="crypto-icon">₮</div>
+      <div class="crypto-info">
+        <div class="crypto-name">Tether</div>
+        <div class="crypto-network">USDT · ERC-20 (same as ETH address)</div>
+        <div class="crypto-addr" id="addr-usdt">0xa3a2af7ca6606d6d230b68fc288ec857e3fbdc5d</div>
+      </div>
+      <button class="copy-btn" onclick="copyAddr('addr-usdt',this)">Copy</button>
+    </div>
+
+    <div class="crypto-card ltc">
+      <div class="crypto-icon" style="color:#a5a5a5">Ł</div>
+      <div class="crypto-info">
+        <div class="crypto-name">Litecoin</div>
+        <div class="crypto-network">LTC · Native SegWit</div>
+        <div class="crypto-addr" id="addr-ltc">ltc1q6lwtym807znd9mtqujjg9qmzhf0vtkn8et0xy7</div>
+      </div>
+      <button class="copy-btn" onclick="copyAddr('addr-ltc',this)">Copy</button>
+    </div>
+
+    <div class="crypto-card bch">
+      <div class="crypto-icon" style="color:#8cc63f">₿</div>
+      <div class="crypto-info">
+        <div class="crypto-name">Bitcoin Cash</div>
+        <div class="crypto-network">BCH · CashAddr format</div>
+        <div class="crypto-addr" id="addr-bch">qrllual2rrqzg03a6nht5fs7qynrpn4l5sksnj0jpa</div>
+      </div>
+      <button class="copy-btn" onclick="copyAddr('addr-bch',this)">Copy</button>
+    </div>
+
+    <div class="crypto-card etc">
+      <div class="crypto-icon" style="color:#328652">⟠</div>
+      <div class="crypto-info">
+        <div class="crypto-name">Ethereum Classic</div>
+        <div class="crypto-network">ETC · Classic Network</div>
+        <div class="crypto-addr" id="addr-etc">0x9445c241240bbd4a9a9ece2c5786d14f9cd8e0b4</div>
+      </div>
+      <button class="copy-btn" onclick="copyAddr('addr-etc',this)">Copy</button>
+    </div>
+
+  </div>
+
+  <!-- LICENSE -->
+  <div class="section-title">Commercial License</div>
+  <div class="license-note">
+    <h3>Free for individuals · Commercial use requires agreement</h3>
+    <p>
+      ApexKairos is <strong>free for personal use</strong> — download, modify, run on your own hardware.
+      Companies and organizations using ApexKairos commercially pay a percentage of attributable revenue.
+    </p>
+    <div class="license-grid">
+      <div class="license-tier">
+        <div class="l-tier-name">Startup</div>
+        <div class="l-tier-pct">2%</div>
+        <div class="l-tier-desc">&lt; €100k annual revenue</div>
+      </div>
+      <div class="license-tier">
+        <div class="l-tier-name">SME</div>
+        <div class="l-tier-pct">3%</div>
+        <div class="l-tier-desc">€100k – €1M revenue</div>
+      </div>
+      <div class="license-tier">
+        <div class="l-tier-name">Enterprise</div>
+        <div class="l-tier-pct">5%</div>
+        <div class="l-tier-desc">&gt; €1M revenue</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISTRIBUTION -->
+  <div class="dist">
+    <h3>How license earnings are distributed</h3>
+    <div class="dist-row"><span class="dist-label">Author (Sven Budisa)</span><span class="dist-val">70%</span></div>
+    <div class="dist-row"><span class="dist-label">AING / airig.ai cooperative pool</span><span class="dist-val">20%</span></div>
+    <div class="dist-row"><span class="dist-label">Community contributors</span><span class="dist-val">10%</span></div>
+    <div class="dist-row" style="padding-top:.6rem;">
+      <span class="dist-label" style="font-size:.48rem;color:var(--text-ghost);">Distribution at author's discretion per project · Subject to change</span>
+      <span></span>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-hash">
+      Sven Budisa (Anomaly / One) · Banja Luka, Bosnia and Herzegovina<br>
+      AING.ai 2014 · airig.ai 2026 · ApexKairos 2026<br>
+      SHA256 timestamped · Bitcoin OTS verified · github.com/aing-ai<br>
+      "From fracture, form."
+    </div>
+  </div>
+
+</div>
+
+<script>
+function copyAddr(id,btn){
+  const addr=document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(addr).then(()=>{
+    btn.textContent='Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('copied');},2000);
+  }).catch(()=>{
+    btn.textContent='Error';
+    setTimeout(()=>{btn.textContent='Copy';},2000);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Support ApexKairos — AING Ecosystem</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020810;--bg2:#050d1a;--bg3:#080f20;
+  --teal:#00e5c4;--teal-dim:rgba(0,229,196,.12);--teal-glow:rgba(0,229,196,.06);
+  --gold:#f0c040;--gold-dim:rgba(240,192,64,.1);--gold-glow:rgba(240,192,64,.05);
+  --purple:#8060d8;
+  --text:#c8e8e0;--text-dim:rgba(200,232,224,.38);--text-ghost:rgba(200,232,224,.12);
+  --border:rgba(0,229,196,.1);--border-gold:rgba(240,192,64,.12);
+  --font:'JetBrains Mono',monospace;--font-d:'Cinzel',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,196,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,196,.012) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:920px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+
+/* LANG BAR */
+.lang-bar{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-bottom:2rem;padding:.9rem 1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;}
+.lang-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:var(--font);font-size:.44rem;letter-spacing:.06em;padding:.3rem .55rem;border-radius:4px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.3rem;}
+.lang-btn:hover{border-color:var(--teal);color:var(--teal);}
+.lang-btn.active{border-color:var(--teal);color:var(--teal);background:var(--teal-glow);}
+
+/* HEADER */
+.header{text-align:center;padding:2rem 0 1.8rem;}
+.badge{display:inline-block;font-size:.5rem;letter-spacing:.4em;text-transform:uppercase;color:var(--teal);border:1px solid var(--border);padding:.3rem .9rem;border-radius:20px;margin-bottom:1rem;background:var(--teal-glow);}
+.header h1{font-family:var(--font-d);font-size:clamp(1.6rem,4vw,2.8rem);font-weight:400;letter-spacing:.15em;color:#fff;margin-bottom:.5rem;}
+.header h1 span{color:var(--teal);}
+.header p{font-size:.58rem;color:var(--text-dim);line-height:2;max-width:600px;margin:0 auto;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);margin:1.8rem 0;}
+
+/* SECTION TITLE */
+.st{font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem;}
+.st::before,.st::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.st::after{background:linear-gradient(270deg,var(--border),transparent);}
+
+/* WHY */
+.why{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.3rem;margin-bottom:1.8rem;}
+.why p{font-size:.58rem;color:var(--text-dim);line-height:2;margin-bottom:.5rem;}
+.why p:last-child{margin-bottom:0;}
+.why strong{color:var(--teal);}
+.why .gold{color:var(--gold);}
+
+/* FIAT */
+.fiat-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.8rem;}
+@media(max-width:480px){.fiat-grid{grid-template-columns:1fr;}}
+.fiat-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.1rem;text-align:center;text-decoration:none;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:.45rem;}
+.fiat-card:hover{border-color:var(--teal);background:var(--teal-glow);transform:translateY(-2px);}
+.fiat-icon{font-size:1.6rem;}
+.fiat-name{font-family:var(--font-d);font-size:.7rem;letter-spacing:.08em;color:#fff;}
+.fiat-url{font-size:.48rem;color:var(--teal);}
+.fiat-desc{font-size:.46rem;color:var(--text-dim);}
+
+/* WALLET */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem;margin-bottom:1.8rem;}
+@media(max-width:540px){.wgrid{grid-template-columns:1fr;}}
+.wcard{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.9rem;display:flex;align-items:center;gap:.7rem;transition:border-color .2s;}
+.wcard:hover{border-color:rgba(0,229,196,.25);}
+.wicon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;flex-shrink:0;border:1px solid;}
+.winfo{min-width:0;flex:1;}
+.wname{font-size:.52rem;font-weight:700;color:#fff;margin-bottom:.15rem;}
+.wnet{font-size:.4rem;color:var(--text-ghost);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.2rem;}
+.waddr{font-size:.4rem;word-break:break-all;line-height:1.6;}
+.wcopy{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:var(--font);font-size:.4rem;letter-spacing:.08em;padding:.35rem .6rem;border-radius:4px;cursor:pointer;flex-shrink:0;white-space:nowrap;transition:all .2s;}
+.wcopy:hover{border-color:var(--teal);color:var(--teal);}
+.wcopy.ok{border-color:var(--teal);color:var(--teal);background:var(--teal-glow);}
+
+/* DISTRIBUTION */
+.dist{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.1rem;margin-bottom:1.8rem;}
+.dist h3{font-size:.5rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);margin-bottom:.8rem;}
+.dist-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(200,232,224,.04);font-size:.55rem;}
+.dist-row:last-child{border-bottom:none;}
+.dist-bar{height:3px;background:var(--bg3);border-radius:2px;margin-top:.2rem;overflow:hidden;}
+.dist-fill{height:100%;border-radius:2px;}
+
+/* HALL OF FAME */
+.hof{background:linear-gradient(135deg,rgba(240,192,64,.06),rgba(240,192,64,.02));border:1px solid var(--border-gold);border-radius:8px;padding:1.3rem;margin-bottom:1.8rem;}
+.hof-header{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;}
+.hof-crown{font-size:1.4rem;}
+.hof-title{font-family:var(--font-d);font-size:.85rem;letter-spacing:.1em;color:var(--gold);}
+.hof-sub{font-size:.5rem;color:var(--text-dim);margin-top:.15rem;}
+.hof-desc{font-size:.55rem;color:var(--text-dim);line-height:1.9;margin-bottom:1rem;}
+.hof-desc strong{color:var(--gold);}
+.hof-tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:.6rem;margin-bottom:1rem;}
+@media(max-width:500px){.hof-tiers{grid-template-columns:1fr;}}
+.hof-tier{background:rgba(0,0,0,.25);border:1px solid var(--border-gold);border-radius:6px;padding:.7rem;text-align:center;}
+.hof-tier-icon{font-size:1.2rem;margin-bottom:.3rem;}
+.hof-tier-name{font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.2rem;}
+.hof-tier-amount{font-size:1rem;font-weight:700;color:var(--gold);margin-bottom:.2rem;}
+.hof-tier-perk{font-size:.42rem;color:var(--text-dim);line-height:1.6;}
+.hof-note{font-size:.48rem;color:var(--text-ghost);line-height:1.7;font-style:italic;border-top:1px solid var(--border-gold);padding-top:.8rem;margin-top:.2rem;}
+.hof-note strong{color:rgba(240,192,64,.5);}
+
+/* PLACEHOLDER ENTRIES */
+.hof-entries{margin-top:.8rem;}
+.hof-entry{display:flex;align-items:center;gap:.8rem;padding:.55rem .7rem;border-radius:6px;background:rgba(0,0,0,.15);margin-bottom:.4rem;transition:background .2s;}
+.hof-entry:hover{background:rgba(240,192,64,.04);}
+.hof-entry-rank{font-size:.55rem;color:var(--gold);font-weight:700;min-width:22px;text-align:center;}
+.hof-entry-name{font-size:.58rem;color:var(--text);flex:1;font-family:var(--font-d);letter-spacing:.05em;}
+.hof-entry-amount{font-size:.5rem;color:var(--gold);font-weight:700;}
+.hof-entry-badge{font-size:.42rem;color:var(--text-ghost);letter-spacing:.08em;text-transform:uppercase;}
+.hof-empty{text-align:center;padding:1.2rem;font-size:.55rem;color:var(--text-ghost);font-style:italic;}
+
+/* LINKS */
+.links-row{display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.8rem;}
+.lnk{display:inline-block;font-size:.48rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);border:1px solid var(--border);padding:.4rem .85rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.lnk:hover{background:var(--teal-glow);border-color:var(--teal);}
+
+/* FOOTER */
+.footer{text-align:center;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.42rem;color:var(--text-ghost);line-height:2;letter-spacing:.08em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- LANG BAR -->
+<div class="lang-bar" id="langBar"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="badge" id="t-badge">ApexKairos · AING Ecosystem · Support the Mission</div>
+  <h1 id="t-h1">Support <span>the Mission</span></h1>
+  <p id="t-desc">This is a solo build. One person, limited resources, real results — 12 years of architecture condensed into live software. Your support directly funds airig.ai and ApexKairos — open cooperative systems built for everyone, owned by no one.</p>
+</div>
+<div class="divider"></div>
+
+<!-- WHY -->
+<div class="why" id="t-why">
+  <p><strong>Why does this need funding?</strong></p>
+  <p>airig.ai is live. ApexKairos is being built. Both are pre-revenue — the cooperative economics model means the vault only fills when the network grows. Until then, development costs come from the founder directly.</p>
+  <p>Your donation covers: server costs, API access, domain fees, hardware maintenance, and the time required to build something the world hasn't seen yet. Not marketing. The actual build.</p>
+  <p><span class="gold">30% of all commercial license earnings</span> are distributed back to the community through the AING/airig.ai cooperative pool.</p>
+</div>
+
+<!-- FIAT -->
+<div class="st" id="t-st-fiat">Direct donation</div>
+<div class="fiat-grid">
+  <a class="fiat-card" href="https://ko-fi.com/apexkairos" target="_blank" rel="noopener">
+    <div class="fiat-icon">☕</div>
+    <div class="fiat-name">Ko-fi</div>
+    <div class="fiat-url">ko-fi.com/apexkairos</div>
+    <div class="fiat-desc" id="t-kofi-desc">Simple · No account needed · One-time or monthly</div>
+  </a>
+  <a class="fiat-card" href="https://paypal.me/apexkairos" target="_blank" rel="noopener">
+    <div class="fiat-icon">🅿</div>
+    <div class="fiat-name">PayPal</div>
+    <div class="fiat-url">paypal.me/apexkairos</div>
+    <div class="fiat-desc" id="t-paypal-desc">Fast · Global · Any amount</div>
+  </a>
+</div>
+
+<!-- CRYPTO -->
+<div class="st" id="t-st-crypto">Cryptocurrency</div>
+<div class="wgrid">
+
+  <div class="wcard"><div class="wicon" style="background:rgba(247,147,26,.1);border-color:rgba(247,147,26,.25);color:#f7931a;">₿</div><div class="winfo"><div class="wname">Bitcoin</div><div class="wnet">BTC · Native SegWit</div><div class="waddr" style="color:var(--teal)" id="w-btc">bc1qmp0tm3p6f7a2u8dcymkaygaj80sy32346n30f6</div></div><button class="wcopy" onclick="cp('w-btc',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(98,126,234,.1);border-color:rgba(98,126,234,.25);color:#627eea;">Ξ</div><div class="winfo"><div class="wname">Ethereum</div><div class="wnet">ETH · ERC-20</div><div class="waddr" style="color:var(--teal)" id="w-eth">0xa3a2af7ca6606d6d230b68fc288ec857e3fbdc5d</div></div><button class="wcopy" onclick="cp('w-eth',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(38,161,123,.1);border-color:rgba(38,161,123,.25);color:#26a17b;">₮</div><div class="winfo"><div class="wname">Tether</div><div class="wnet">USDT · ERC-20</div><div class="waddr" style="color:var(--teal)" id="w-usdt">0xa3a2af7ca6606d6d230b68fc288ec857e3fbdc5d</div></div><button class="wcopy" onclick="cp('w-usdt',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(180,180,180,.08);border-color:rgba(180,180,180,.15);color:#aaa;">Ł</div><div class="winfo"><div class="wname">Litecoin</div><div class="wnet">LTC · Native SegWit</div><div class="waddr" style="color:var(--text-dim)" id="w-ltc">ltc1q6lwtym807znd9mtqujjg9qmzhf0vtkn8et0xy7</div></div><button class="wcopy" onclick="cp('w-ltc',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(140,198,63,.1);border-color:rgba(140,198,63,.25);color:#8cc63f;">₿</div><div class="winfo"><div class="wname">Bitcoin Cash</div><div class="wnet">BCH · CashAddr</div><div class="waddr" style="color:var(--text-dim)" id="w-bch">qrllual2rrqzg03a6nht5fs7qynrpn4l5sksnj0jpa</div></div><button class="wcopy" onclick="cp('w-bch',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(50,134,82,.1);border-color:rgba(50,134,82,.25);color:#328652;">⟠</div><div class="winfo"><div class="wname">Ethereum Classic</div><div class="wnet">ETC · Classic Network</div><div class="waddr" style="color:var(--text-dim)" id="w-etc">0x9445c241240bbd4a9a9ece2c5786d14f9cd8e0b4</div></div><button class="wcopy" onclick="cp('w-etc',this)">Copy</button></div>
+
+</div>
+
+<!-- HALL OF FAME -->
+<div class="hof">
+  <div class="hof-header">
+    <div class="hof-crown">⬡</div>
+    <div>
+      <div class="hof-title" id="t-hof-title">Hall of Fame</div>
+      <div class="hof-sub" id="t-hof-sub">Those who believed before the world knew</div>
+    </div>
+  </div>
+  <div class="hof-desc" id="t-hof-desc">
+    Every person who supports this mission is permanently recorded here. <strong>Your name, your contribution, your timestamp.</strong> When airig.ai reaches the people it was built for — this list will be the proof of who was there first. Early supporters receive recognition in the cooperative network as founding members of the AING ecosystem.
+  </div>
+
+  <div class="hof-tiers">
+    <div class="hof-tier">
+      <div class="hof-tier-name" id="t-tier1-name">Witness</div>
+      <div class="hof-tier-amount">€1 – €49</div>
+      <div class="hof-tier-perk" id="t-tier1-perk">Name in Hall of Fame · Timestamp recorded · Gratitude that is real</div>
+    </div>
+    <div class="hof-tier">
+      <div class="hof-tier-name" id="t-tier2-name">Builder</div>
+      <div class="hof-tier-amount">€50 – €249</div>
+      <div class="hof-tier-perk" id="t-tier2-perk">Name + message displayed · Badge — in preparation, will be assigned when the time comes</div>
+    </div>
+    <div class="hof-tier">
+      <div class="hof-tier-name" id="t-tier3-name">Founder</div>
+      <div class="hof-tier-amount">€250+</div>
+      <div class="hof-tier-perk" id="t-tier3-perk">Permanent Founder status · Custom message · Listed in all public documents · Badge — in preparation</div>
+    </div>
+  </div>
+
+  <div class="hof-entries" id="hofEntries">
+    <div class="hof-empty" id="t-hof-empty">⬡ &nbsp; The Hall of Fame is open. Be the first to enter. &nbsp; ⬡</div>
+  </div>
+
+  <div class="hof-note" id="t-hof-note">
+    To be listed: donate via any channel above, then contact via <a href="https://ko-fi.com/apexkairos" target="_blank" style="color:var(--teal);text-decoration:none;">Ko-fi</a> with your name (or alias) + amount + preferred display message. <strong>Anonymous donations are honoured — listed as "Anonymous Witness".</strong>
+  </div>
+</div>
+
+<!-- LINKS -->
+<div class="st" id="t-st-links">Find us</div>
+<div class="links-row">
+  <a class="lnk" href="https://airig.ai" target="_blank">airig.ai</a>
+  <a class="lnk" href="https://aing.ai" target="_blank">aing.ai</a>
+  <a class="lnk" href="https://github.com/aing-ai" target="_blank">GitHub</a>
+  <a class="lnk" href="https://ko-fi.com/apexkairos" target="_blank">Ko-fi</a>
+  <a class="lnk" href="https://paypal.me/apexkairos" target="_blank">PayPal</a>
+</div>
+
+<div class="footer" id="t-footer">
+  Sven Budisa (Anomaly / One) · Banja Luka, Bosnia and Herzegovina<br>
+  AING.ai 2014 · airig.ai 2026 · ApexKairos 2026<br>
+  SHA256 timestamped · Bitcoin OTS verified · github.com/aing-ai<br>
+  "From fracture, form."
+</div>
+
+</div>
+
+<script>
+function cp(id,btn){
+  const t=document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(t).then(()=>{
+    btn.textContent='✓';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2000);
+  });
+}
+
+const T={
+  en:{flag:'🇬🇧',name:'English',badge:'ApexKairos · AING Ecosystem · Support the Mission',h1:'Support <span>the Mission</span>',desc:'This is a solo build. One person, limited resources, real results — 12 years of architecture condensed into live software. Your support funds airig.ai and ApexKairos — open cooperative systems built for everyone, owned by no one.',why:`<p><strong>Why does this need funding?</strong></p><p>airig.ai is live. ApexKairos is being built. Both are pre-revenue — the vault only fills when the network grows. Until then, development costs come from the founder directly.</p><p>Your donation covers: server costs, API access, domain fees, hardware maintenance, and the time to build something the world hasn't seen yet.</p>`,stFiat:'Direct donation',kofiDesc:'Simple · No account needed · One-time or monthly',paypalDesc:'Fast · Global · Any amount',stCrypto:'Cryptocurrency',hofTitle:'Hall of Fame',hofSub:'Those who believed before the world knew',hofDesc:'Every person who supports this mission is permanently recorded here. <strong>Your name, your contribution, your timestamp.</strong> When airig.ai reaches the people it was built for — this list will be the proof of who was there first.',t1:'Witness',t1p:'Name in Hall of Fame · Timestamp recorded · Gratitude that is real',t2:'Builder',t2p:'Name + message displayed · Badge — in preparation, will be assigned when the time comes',t3:'Founder',t3p:'Permanent Founder status · Custom message · Listed in all public documents · Badge — in preparation',hofEmpty:'The Hall of Fame is open. Be the first to enter.',hofNote:'To be listed: donate via any channel above, then contact via Ko-fi with your name (or alias) + amount + message. <strong>Anonymous donations are honoured — listed as "Anonymous Witness".</strong>',stLinks:'Find us',footer:'Sven Budisa (Anomaly / One) · Banja Luka, Bosnia and Herzegovina<br>AING.ai 2014 · airig.ai 2026 · ApexKairos 2026<br>"From fracture, form."'},
+
+  bs:{flag:'🇧🇦',name:'Bosanski',badge:'ApexKairos · AING Ekosistem · Podrži Misiju',h1:'Podrži <span>Misiju</span>',desc:'Ovo gradi jedna osoba, ograničenim resursima, sa stvarnim rezultatima — 12 godina arhitekture u živom softveru. Vaša podrška finansira airig.ai i ApexKairos — otvorene kooperativne sisteme napravljene za sve, u vlasništvu nikoga.',why:`<p><strong>Zašto je potrebno finansiranje?</strong></p><p>airig.ai je live. ApexKairos se gradi. Oba su pre-revenue — trezor se puni tek kad mreža raste. Do tada, troškove razvoja snosi osnivač lično.</p><p>Vaša donacija pokriva: troškove servera, API pristup, domene, hardver i vrijeme potrebno za gradnju nečega što svijet još nije vidio.</p><p></p>`,stFiat:'Direktna donacija',kofiDesc:'Jednostavno · Bez računa · Jednom ili månačno',paypalDesc:'Brzo · Globalno · Bilo koji iznos',stCrypto:'Kriptovalute',distH:'Kako se koriste donacije',dist1:'Troškovi servera, API-ji, domeni',dist2:'Razvojno vrijeme (osnivač)',dist3:'Sjeme kooperativnog fonda — airig.ai korisnici',hofTitle:'Hall of Fame',hofSub:'Oni koji su povjerovali prije nego što je svijet znao',hofDesc:'Svaka osoba koja podrži ovu misiju je trajno zabilježena ovdje. <strong>Vaše ime, vaš doprinos, vaš timestamp.</strong> Kad airig.ai dostigne ljude za koje je napravljen — ova lista će biti dokaz ko je bio prvi.',t1:'Svjedok',t1p:'Ime u Hall of Fame · Timestamp zapisan · Zahvalnost koja je stvarna',t2:'Graditelj',t2p:'Ime + poruka prikazana · Bedža — u pripremi, dodijelit će se kada za to dođe vrijeme',t3:'Osnivač',t3p:'Trajni status Osnivača · Prilagođena poruka · Navedeni u svim javnim dokumentima · Bedža — u pripremi',hofEmpty:'Hall of Fame je otvoren. Budite prvi.',hofNote:'Za unos: donirajte putem bilo kojeg kanala gore, pa nas kontaktirajte na Ko-fi s imenom (ili aliasom) + iznosom + porukom. <strong>Anonimne donacije su poštovane — evidentirane kao "Anonimni Svjedok".</strong>',stLinks:'Pronađite nas',footer:'Sven Budisa (Anomaly / One) · Banja Luka, Bosna i Hercegovina<br>AING.ai 2014 · airig.ai 2026 · ApexKairos 2026<br>SHA256 timestampovano · Bitcoin OTS verificirano<br>"Od haosa — forma."'},
+
+  de:{flag:'🇩🇪',name:'Deutsch',badge:'ApexKairos · AING Ökosystem · Unterstütze die Mission',h1:'Unterstütze <span>die Mission</span>',desc:'Das ist ein Solo-Projekt. Eine Person, begrenzte Ressourcen, echte Ergebnisse — 12 Jahre Architektur in lebendiger Software. Ihre Unterstützung finanziert airig.ai und ApexKairos.',why:`<p><strong>Warum braucht das Finanzierung?</strong></p><p>airig.ai ist live. ApexKairos wird gebaut. Beide sind pre-revenue. Entwicklungskosten trägt der Gründer persönlich.</p>`,stFiat:'Direkte Spende',kofiDesc:'Einfach · Kein Konto nötig · Einmalig oder monatlich',paypalDesc:'Schnell · Global · Jeder Betrag',stCrypto:'Kryptowährung',distH:'Verwendung der Spenden',dist1:'Serverkosten, APIs, Domains',dist2:'Entwicklungszeit (Gründer)',dist3:'Community-Pool-Startkapital',hofTitle:'Hall of Fame',hofSub:'Diejenigen, die glaubten, bevor die Welt es wusste',hofDesc:'Jede Person, die diese Mission unterstützt, wird hier dauerhaft erfasst. <strong>Ihr Name, Ihr Beitrag, Ihr Zeitstempel.</strong>',t1:'Zeuge',t1p:'Name im Hall of Fame · Zeitstempel · Echte Dankbarkeit',t2:'Erbauer',t2p:'Name + Nachricht · Abzeichen — in Vorbereitung, wird zugewiesen wenn die Zeit kommt',t3:'Gründer',t3p:'Dauerhafter Gründer-Status · Eigene Nachricht · In allen Dokumenten aufgeführt · Abzeichen — in Vorbereitung',hofEmpty:'Der Hall of Fame ist offen. Seien Sie der Erste.',hofNote:'Zur Aufnahme: Spenden Sie und kontaktieren Sie uns über Ko-fi mit Ihrem Namen + Betrag + Nachricht. <strong>Anonyme Spenden werden als "Anonymer Zeuge" erfasst.</strong>',stLinks:'Finden Sie uns',footer:'Sven Budisa (Anomaly / One) · Banja Luka, Bosnien<br>AING.ai 2014 · airig.ai 2026 · "Aus dem Bruch — Form."'},
+
+  fr:{flag:'🇫🇷',name:'Français',badge:'ApexKairos · Écosystème AING · Soutenez la Mission',h1:'Soutenez <span>la Mission</span>',desc:'C\'est un projet solo. Une personne, des ressources limitées, de vrais résultats — 12 ans d\'architecture condensés en logiciel vivant.',why:`<p><strong>Pourquoi ce financement est-il nécessaire ?</strong></p><p>airig.ai est en ligne. ApexKairos est en construction. Les coûts de développement sont assumés personnellement par le fondateur.</p>`,stFiat:'Don direct',kofiDesc:'Simple · Sans compte · Unique ou mensuel',paypalDesc:'Rapide · Mondial · Tout montant',stCrypto:'Cryptomonnaies',distH:'Utilisation des dons',dist1:'Serveurs, APIs, domaines',dist2:'Temps de développement (fondateur)',dist3:'Amorçage du pool communautaire',hofTitle:'Hall of Fame',hofSub:'Ceux qui ont cru avant que le monde le sache',hofDesc:'Chaque personne qui soutient cette mission est enregistrée ici en permanence. <strong>Votre nom, votre contribution, votre horodatage.</strong>',t1:'Témoin',t1p:'Nom au Hall of Fame · Horodatage · Gratitude sincère',t2:'Bâtisseur',t2p:'Nom + message · Badge — en préparation, sera attribué le moment venu',t3:'Fondateur',t3p:'Statut Fondateur permanent · Message personnalisé · Dans tous les documents publics · Badge — en préparation',hofEmpty:'Le Hall of Fame est ouvert. Soyez le premier.',hofNote:'Pour être inscrit: donnez puis contactez-nous sur Ko-fi avec votre nom + montant + message. <strong>Les dons anonymes sont honorés comme "Témoin Anonyme".</strong>',stLinks:'Nous trouver',footer:'Sven Budisa (Anomaly / One) · Banja Luka, Bosnie<br>AING.ai 2014 · airig.ai 2026 · "Du chaos — la forme."'},
+
+  es:{flag:'🇪🇸',name:'Español',badge:'ApexKairos · Ecosistema AING · Apoya la Misión',h1:'Apoya <span>la Misión</span>',desc:'Este es un proyecto individual. Una persona, recursos limitados, resultados reales — 12 años de arquitectura en software vivo.',why:`<p><strong>¿Por qué necesita financiación?</strong></p><p>airig.ai está en vivo. ApexKairos se está construyendo. Los costes de desarrollo los asume el fundador personalmente.</p><p></p>`,stFiat:'Donación directa',kofiDesc:'Simple · Sin cuenta · Único o mensual',paypalDesc:'Rápido · Global · Cualquier cantidad',stCrypto:'Criptomonedas',distH:'Uso de las donaciones',dist1:'Servidores, APIs, dominios',dist2:'Tiempo de desarrollo (fundador)',dist3:'Semilla del pool comunitario',hofTitle:'Hall of Fame',hofSub:'Los que creyeron antes de que el mundo lo supiera',hofDesc:'Cada persona que apoya esta misión queda registrada aquí permanentemente. <strong>Tu nombre, tu contribución, tu marca de tiempo.</strong>',t1:'Testigo',t1p:'Nombre en el Hall of Fame · Timestamp · Gratitud real',t2:'Constructor',t2p:'Nombre + mensaje · Insignia — en preparación, se asignará cuando llegue el momento',t3:'Fundador',t3p:'Estado de Fundador permanente · Mensaje personalizado · Canal directo · En todos los documentos públicos',hofEmpty:'El Hall of Fame está abierto. Sé el primero.',hofNote:'Para aparecer: dona y luego contáctanos en Ko-fi con tu nombre + cantidad + mensaje. <strong>Las donaciones anónimas se registran como "Testigo Anónimo".</strong>',stLinks:'Encuéntranos',footer:'Sven Budisa (Anomaly / One) · Banja Luka, Bosnia<br>AING.ai 2014 · airig.ai 2026 · "Del caos — la forma."'},
+
+  zh:{flag:'🇨🇳',name:'中文',badge:'ApexKairos · AING生态系统 · 支持使命',h1:'支持 <span>使命</span>',desc:'这是一个独立项目。一个人，有限的资源，真实的成果——12年的架构浓缩在实时运行的软件中。',why:`<p><strong>为什么需要资金？</strong></p><p>airig.ai已上线。ApexKairos正在建设中。开发成本由创始人个人承担。</p><p></p>`,stFiat:'直接捐款',kofiDesc:'简单 · 无需账户 · 一次性或每月',paypalDesc:'快速 · 全球 · 任意金额',stCrypto:'加密货币',distH:'捐款使用方式',dist1:'服务器、API、域名费用',dist2:'开发时间（创始人）',dist3:'社区池种子资金',hofTitle:'名人堂',hofSub:'在世界知晓之前就相信的人',hofDesc:'每位支持这一使命的人都将被永久记录在此。<strong>您的姓名、您的贡献、您的时间戳。</strong>',t1:'见证者',t1p:'姓名列入名人堂 · 时间戳记录 · 真诚感谢',t2:'建设者',t2p:'姓名+留言展示 · 徽章 — 准备中，时机到来时将予以分配',t3:'创始人',t3p:'永久创始人状态 · 自定义留言 · 载入所有公开文件 · 徽章 — 准备中',hofEmpty:'名人堂已开放。成为第一位。',hofNote:'要列入名单：通过上述渠道捐款，然后在Ko-fi联系我们，留下您的姓名+金额+留言。<strong>匿名捐款将以"匿名见证者"记录。</strong>',stLinks:'找到我们',footer:'Sven Budisa (Anomaly / One) · 班亚卢卡，波黑<br>AING.ai 2014 · airig.ai 2026 · "从裂缝中，成形。"'},
+
+  hi:{flag:'🇮🇳',name:'हिन्दी',badge:'ApexKairos · AING इकोसिस्टम · मिशन का समर्थन करें',h1:'<span>मिशन</span> का समर्थन करें',desc:'यह एक एकल निर्माण है। एक व्यक्ति, सीमित संसाधन, वास्तविक परिणाम — 12 साल की वास्तुकला जीवित सॉफ्टवेयर में।',why:`<p><strong>इसे फंडिंग की जरूरत क्यों है?</strong></p><p>airig.ai लाइव है। ApexKairos बन रहा है। विकास लागत संस्थापक स्वयं वहन करते हैं।</p><p></p>`,stFiat:'प्रत्यक्ष दान',kofiDesc:'सरल · कोई खाता नहीं · एकबारगी या मासिक',paypalDesc:'तेज़ · वैश्विक · कोई भी राशि',stCrypto:'क्रिप्टोकरेंसी',distH:'दान का उपयोग',dist1:'सर्वर, API, डोमेन लागत',dist2:'विकास समय (संस्थापक)',dist3:'सामुदायिक पूल बीज निधि',hofTitle:'हॉल ऑफ फेम',hofSub:'वे जो दुनिया के जानने से पहले विश्वास करते थे',hofDesc:'इस मिशन का समर्थन करने वाला हर व्यक्ति यहां स्थायी रूप से दर्ज है। <strong>आपका नाम, आपका योगदान, आपका टाइमस्टैम्प।</strong>',t1:'साक्षी',t1p:'हॉल ऑफ फेम में नाम · टाइमस्टैम्प · वास्तविक कृतज्ञता',t2:'निर्माता',t2p:'नाम + संदेश · बैज — तैयारी में है, समय आने पर दिया जाएगा',t3:'संस्थापक',t3p:'स्थायी संस्थापक दर्जा · कस्टम संदेश · सभी दस्तावेजों में · बैज — तैयारी में है',hofEmpty:'हॉल ऑफ फेम खुला है। पहले बनें।',hofNote:'सूचीबद्ध होने के लिए: दान करें फिर Ko-fi पर संपर्क करें, अपना नाम + राशि + संदेश दें। <strong>अज्ञात दान "अज्ञात साक्षी" के रूप में दर्ज।</strong>',stLinks:'हमें खोजें',footer:'Sven Budisa (Anomaly / One) · बान्या लुका, बोस्निया<br>AING.ai 2014 · airig.ai 2026 · "टूट से, रूप।"'},
+
+  ar:{flag:'🇦🇪',name:'العربية',badge:'ApexKairos · نظام AING البيئي · ادعم المهمة',h1:'ادعم <span>المهمة</span>',desc:'هذا مشروع فردي. شخص واحد، موارد محدودة، نتائج حقيقية — 12 عامًا من البنية المعمارية في برنامج حي.',why:`<p><strong>لماذا يحتاج إلى تمويل؟</strong></p><p>airig.ai مباشر. ApexKairos قيد البناء. تكاليف التطوير يتحملها المؤسس شخصيًا.</p><p></p>`,stFiat:'تبرع مباشر',kofiDesc:'بسيط · بدون حساب · مرة واحدة أو شهريًا',paypalDesc:'سريع · عالمي · أي مبلغ',stCrypto:'العملات المشفرة',distH:'كيف تُستخدم التبرعات',dist1:'تكاليف الخوادم، APIs، النطاقات',dist2:'وقت التطوير (المؤسس)',dist3:'تمويل مجموعة المجتمع',hofTitle:'قاعة المشاهير',hofSub:'الذين آمنوا قبل أن يعرف العالم',hofDesc:'كل شخص يدعم هذه المهمة مُسجَّل هنا بشكل دائم. <strong>اسمك، مساهمتك، طابعك الزمني.</strong>',t1:'شاهد',t1p:'الاسم في قاعة المشاهير · طابع زمني · امتنان حقيقي',t2:'باني',t2p:'الاسم + رسالة · شارة — قيد الإعداد، ستُمنح عند حلول الوقت المناسب',t3:'مؤسس',t3p:'وضع المؤسس الدائم · رسالة مخصصة · في جميع الوثائق العامة · شارة — قيد الإعداد',hofEmpty:'قاعة المشاهير مفتوحة. كن الأول.',hofNote:'للإدراج: تبرع ثم تواصل معنا عبر Ko-fi مع اسمك + المبلغ + الرسالة. <strong>التبرعات المجهولة مُكرَّمة كـ"شاهد مجهول".</strong>',stLinks:'ابحث عنا',footer:'.Sven Budisa (Anomaly / One) · بانيا لوكا، البوسنة<br>AING.ai 2014 · airig.ai 2026 · "من الكسر — شكل"'},
+
+  pt:{flag:'🇧🇷',name:'Português',badge:'ApexKairos · Ecossistema AING · Apoie a Missão',h1:'Apoie <span>a Missão</span>',desc:'Este é um projeto individual. Uma pessoa, recursos limitados, resultados reais — 12 anos de arquitetura em software vivo.',why:`<p><strong>Por que precisa de financiamento?</strong></p><p>airig.ai está no ar. ApexKairos está sendo construído. Os custos de desenvolvimento são assumidos pelo fundador pessoalmente.</p><p></p>`,stFiat:'Doação direta',kofiDesc:'Simples · Sem conta · Única ou mensal',paypalDesc:'Rápido · Global · Qualquer valor',stCrypto:'Criptomoedas',distH:'Como as doações são usadas',dist1:'Servidores, APIs, domínios',dist2:'Tempo de desenvolvimento (fundador)',dist3:'Semente do pool comunitário',hofTitle:'Hall da Fama',hofSub:'Os que acreditaram antes de o mundo saber',hofDesc:'Cada pessoa que apoia esta missão é registrada aqui permanentemente. <strong>Seu nome, sua contribuição, seu timestamp.</strong>',t1:'Testemunha',t1p:'Nome no Hall da Fama · Timestamp · Gratidão real',t2:'Construtor',t2p:'Nome + mensagem · Distintivo — em preparação, será atribuído quando chegar o momento',t3:'Fundador',t3p:'Status de Fundador permanente · Mensagem personalizada · Em todos os documentos públicos · Distintivo — em preparação',hofEmpty:'O Hall da Fama está aberto. Seja o primeiro.',hofNote:'Para constar: doe e entre em contato pelo Ko-fi com seu nome + valor + mensagem. <strong>Doações anônimas são honradas como "Testemunha Anônima".</strong>',stLinks:'Encontre-nos',footer:'Sven Budisa (Anomaly / One) · Banja Luka, Bósnia<br>AING.ai 2014 · airig.ai 2026 · "Da fratura, forma."'},
+
+  ru:{flag:'🇷🇺',name:'Русский',badge:'ApexKairos · Экосистема AING · Поддержи Миссию',h1:'Поддержи <span>Миссию</span>',desc:'Это соло-проект. Один человек, ограниченные ресурсы, реальные результаты — 12 лет архитектуры в живом программном обеспечении.',why:`<p><strong>Почему нужно финансирование?</strong></p><p>airig.ai работает. ApexKairos строится. Затраты на разработку несёт основатель лично.</p><p></p>`,stFiat:'Прямое пожертвование',kofiDesc:'Просто · Без аккаунта · Разово или ежемесячно',paypalDesc:'Быстро · Глобально · Любая сумма',stCrypto:'Криптовалюта',distH:'Как используются пожертвования',dist1:'Серверы, API, домены',dist2:'Время разработки (основатель)',dist3:'Начальный капитал пула сообщества',hofTitle:'Зал Славы',hofSub:'Те, кто верил до того, как мир узнал',hofDesc:'Каждый, кто поддерживает эту миссию, навсегда записан здесь. <strong>Ваше имя, ваш вклад, ваша временна́я метка.</strong>',t1:'Свидетель',t1p:'Имя в Зале Славы · Временна́я метка · Настоящая благодарность',t2:'Строитель',t2p:'Имя + сообщение · Значок — в разработке, будет присвоен когда придёт время',t3:'Основатель',t3p:'Постоянный статус Основателя · Сообщение · Во всех публичных документах · Значок — в разработке',hofEmpty:'Зал Славы открыт. Будьте первым.',hofNote:'Для включения: пожертвуйте и свяжитесь с нами через Ko-fi с именем + суммой + сообщением. <strong>Анонимные взносы фиксируются как "Анонимный Свидетель".</strong>',stLinks:'Найдите нас',footer:'Sven Budisa (Anomaly / One) · Баня-Лука, Босния<br>AING.ai 2014 · airig.ai 2026 · «Из хаоса — форма.»'},
+
+  ja:{flag:'🇯🇵',name:'日本語',badge:'ApexKairos · AIGNエコシステム · ミッションを支援',h1:'ミッションを<span>支援する</span>',desc:'これはひとりのプロジェクトです。一人、限られたリソース、本物の結果 — 12年のアーキテクチャが生きたソフトウェアに凝縮。',why:`<p><strong>なぜ資金が必要なのか？</strong></p><p>airig.aiは稼働中。ApexKairosは開発中。開発費用は創設者が個人負担しています。</p><p></p>`,stFiat:'直接寄付',kofiDesc:'シンプル · アカウント不要 · 一度またはmonthly',paypalDesc:'速い · グローバル · 任意の金額',stCrypto:'暗号通貨',distH:'寄付の使い道',dist1:'サーバー、API、ドメイン費用',dist2:'開発時間（創設者）',dist3:'コミュニティプール初期資金',hofTitle:'殿堂',hofSub:'世界が知る前から信じていた人々',hofDesc:'このミッションを支援するすべての人がここに永久に記録されます。<strong>あなたの名前、あなたの貢献、あなたのタイムスタンプ。</strong>',t1:'証人',t1p:'殿堂に名前 · タイムスタンプ · 本物の感謝',t2:'建設者',t2p:'名前+メッセージ表示 · バッジ — 準備中、時が来たら付与されます',t3:'創設者',t3p:'永続的な創設者ステータス · カスタムメッセージ · すべての公開文書に記載 · バッジ — 準備中',hofEmpty:'殿堂は開放されています。最初の一人になってください。',hofNote:'掲載するには：寄付後、Ko-fiでお名前+金額+メッセージをお送りください。<strong>匿名寄付は「匿名の証人」として記録されます。</strong>',stLinks:'見つけてください',footer:'Sven Budisa (Anomaly / One) · バニャルカ、ボスニア<br>AING.ai 2014 · airig.ai 2026 · 「破壊から、形へ。」'},
+};
+
+let lang='en';
+
+function setEl(id,html){const e=document.getElementById(id);if(e)e.innerHTML=html;}
+
+function applyLang(l){
+  const t=T[l];
+  setEl('t-badge',t.badge);
+  setEl('t-h1',t.h1);
+  setEl('t-desc',t.desc);
+  setEl('t-why',t.why);
+  setEl('t-st-fiat',t.stFiat);
+  setEl('t-kofi-desc',t.kofiDesc);
+  setEl('t-paypal-desc',t.paypalDesc);
+  setEl('t-st-crypto',t.stCrypto);
+  setEl('t-dist-h',t.distH);
+  setEl('t-dist-1',t.dist1);
+  setEl('t-dist-2',t.dist2);
+  setEl('t-dist-3',t.dist3);
+  setEl('t-hof-title',t.hofTitle);
+  setEl('t-hof-sub',t.hofSub);
+  setEl('t-hof-desc',t.hofDesc);
+  setEl('t-tier1-name',t.t1);
+  setEl('t-tier1-perk',t.t1p);
+  setEl('t-tier2-name',t.t2);
+  setEl('t-tier2-perk',t.t2p);
+  setEl('t-tier3-name',t.t3);
+  setEl('t-tier3-perk',t.t3p);
+  setEl('t-hof-empty',t.hofEmpty);
+  setEl('t-hof-note',t.hofNote);
+  setEl('t-st-links',t.stLinks);
+  setEl('t-footer',t.footer);
+}
+
+function renderLangBar(){
+  const bar=document.getElementById('langBar');
+  bar.innerHTML=Object.entries(T).map(([k,v])=>
+    `<button class="lang-btn ${k===lang?'active':''}" onclick="setLang('${k}')"><span>${v.flag}</span>${v.name}</button>`
+  ).join('');
+}
+
+function setLang(l){
+  lang=l;
+  renderLangBar();
+  applyLang(l);
+}
+
+renderLangBar();
+applyLang('en');
+</script>
+</body>
+</html>

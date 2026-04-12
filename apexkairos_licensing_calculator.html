@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ApexKairos — Licensing Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#020810;--bg2:#050d1a;--bg3:#080f20;
+  --teal:#00e5c4;--teal-dim:rgba(0,229,196,.12);--teal-glow:rgba(0,229,196,.06);
+  --gold:#f0c040;--gold-dim:rgba(240,192,64,.1);--gold-glow:rgba(240,192,64,.06);
+  --purple:#8060d8;--red:rgba(255,80,80,.7);
+  --text:#c8e8e0;--text-dim:rgba(200,232,224,.38);--text-ghost:rgba(200,232,224,.12);
+  --border:rgba(0,229,196,.1);--border-gold:rgba(240,192,64,.12);
+  --font:'JetBrains Mono',monospace;--font-d:'Cinzel',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,196,.012) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,196,.012) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+.wrap{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+
+/* LANG SELECTOR */
+.lang-bar{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-bottom:2rem;padding:1rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;}
+.lang-btn{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:var(--font);font-size:.45rem;letter-spacing:.08em;padding:.3rem .6rem;border-radius:4px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.3rem;}
+.lang-btn:hover{border-color:var(--teal);color:var(--teal);}
+.lang-btn.active{border-color:var(--teal);color:var(--teal);background:var(--teal-glow);}
+.flag{font-size:.9rem;}
+
+/* HEADER */
+.header{text-align:center;padding:2rem 0 1.8rem;}
+.badge{display:inline-block;font-size:.5rem;letter-spacing:.4em;text-transform:uppercase;color:var(--teal);border:1px solid var(--border);padding:.3rem .9rem;border-radius:20px;margin-bottom:1rem;background:var(--teal-glow);}
+.header h1{font-family:var(--font-d);font-size:clamp(1.5rem,3.5vw,2.5rem);font-weight:400;letter-spacing:.15em;color:#fff;margin-bottom:.5rem;}
+.header h1 span{color:var(--teal);}
+.header p{font-size:.58rem;color:var(--text-dim);line-height:1.9;max-width:560px;margin:0 auto;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--teal),transparent);margin:1.8rem 0;}
+
+/* CONTROLS */
+.ctrl-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+@media(max-width:600px){.ctrl-grid{grid-template-columns:1fr;}}
+
+.ctrl-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.1rem;}
+.ctrl-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.7rem;}
+.ctrl-label{font-size:.55rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-dim);}
+.ctrl-val{font-size:1rem;font-weight:700;color:var(--teal);}
+.ctrl-val.gold{color:var(--gold);}
+input[type=range]{width:100%;-webkit-appearance:none;height:3px;background:rgba(0,229,196,.1);border-radius:2px;outline:none;cursor:pointer;margin-bottom:.4rem;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;background:var(--teal);border-radius:50%;box-shadow:0 0 8px rgba(0,229,196,.4);cursor:pointer;}
+input[type=range].g::-webkit-slider-thumb{background:var(--gold);box-shadow:0 0 8px rgba(240,192,64,.4);}
+.tick-row{display:flex;justify-content:space-between;font-size:.4rem;color:var(--text-ghost);}
+
+select{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--font);font-size:.58rem;padding:.5rem .7rem;border-radius:4px;outline:none;cursor:pointer;margin-top:.3rem;}
+select:focus{border-color:var(--teal);}
+select option{background:var(--bg2);}
+
+/* SECTION TITLE */
+.st{font-size:.5rem;letter-spacing:.3em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1rem;display:flex;align-items:center;gap:.6rem;}
+.st::before,.st::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+.st::after{background:linear-gradient(270deg,var(--border),transparent);}
+
+/* RESULT CARD */
+.result{background:linear-gradient(135deg,rgba(0,229,196,.06),rgba(0,229,196,.02));border:1px solid var(--border);border-radius:8px;padding:1.4rem;margin-bottom:1.5rem;}
+.result-main{text-align:center;margin-bottom:1.2rem;}
+.result-label{font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.4rem;}
+.result-value{font-family:var(--font-d);font-size:clamp(2rem,5vw,3.5rem);color:var(--teal);letter-spacing:.05em;}
+.result-year{font-size:.6rem;color:var(--text-dim);}
+.result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;}
+@media(max-width:480px){.result-grid{grid-template-columns:1fr;}}
+.rg{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:.8rem;text-align:center;}
+.rg-label{font-size:.44rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.35rem;}
+.rg-val{font-size:.95rem;font-weight:700;}
+
+/* TIERS */
+.tiers{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-bottom:1.5rem;}
+@media(max-width:700px){.tiers{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:380px){.tiers{grid-template-columns:1fr;}}
+.tier{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.9rem;transition:all .25s;cursor:default;}
+.tier.active{border-color:var(--teal);background:var(--teal-glow);box-shadow:0 0 20px rgba(0,229,196,.08);}
+.tier.active.gold-t{border-color:var(--gold);background:var(--gold-glow);}
+.tier-name{font-family:var(--font-d);font-size:.62rem;letter-spacing:.08em;color:#fff;margin-bottom:.4rem;}
+.tier-range{font-size:.44rem;color:var(--text-dim);margin-bottom:.5rem;}
+.tier-pct{font-size:1.4rem;font-weight:700;color:var(--teal);margin-bottom:.2rem;}
+.tier.active.gold-t .tier-pct{color:var(--gold);}
+.tier-note{font-size:.42rem;color:var(--text-ghost);line-height:1.6;}
+.tier-custom{font-size:.48rem;color:var(--gold);margin-top:.3rem;font-style:italic;}
+
+/* DISTRIBUTION */
+.dist-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:1.1rem;margin-bottom:1.5rem;}
+.dist-card h3{font-size:.52rem;letter-spacing:.15em;text-transform:uppercase;color:var(--teal);margin-bottom:.8rem;}
+.dist-row{display:flex;justify-content:space-between;align-items:center;padding:.4rem 0;border-bottom:1px solid rgba(200,232,224,.04);font-size:.55rem;}
+.dist-row:last-child{border-bottom:none;}
+.dist-bar{height:4px;background:var(--bg3);border-radius:2px;margin-top:.25rem;overflow:hidden;}
+.dist-fill{height:100%;border-radius:2px;transition:width .5s ease;}
+
+/* NOTE */
+.note{background:var(--gold-dim);border:1px solid var(--border-gold);border-radius:8px;padding:1rem 1.1rem;margin-bottom:1.5rem;font-size:.55rem;color:var(--text-dim);line-height:1.9;}
+.note strong{color:var(--gold);}
+
+/* CONTACT */
+.contact{text-align:center;padding:1.2rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;}
+.contact p{font-size:.58rem;color:var(--text-dim);margin-bottom:.8rem;line-height:1.8;}
+.contact-links{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;}
+.cl{display:inline-block;font-size:.5rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal);border:1px solid var(--border);padding:.4rem .9rem;border-radius:4px;text-decoration:none;transition:all .2s;}
+.cl:hover{background:var(--teal-glow);border-color:var(--teal);}
+
+/* WALLET */
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem;}
+@media(max-width:520px){.wgrid{grid-template-columns:1fr;}}
+.wcard{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.9rem;display:flex;align-items:center;gap:.7rem;transition:border-color .2s;}
+.wcard:hover{border-color:rgba(0,229,196,.25);}
+.wicon{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0;border:1px solid;}
+.winfo{min-width:0;flex:1;}
+.wname{font-size:.52rem;font-weight:700;color:#fff;margin-bottom:.2rem;}
+.waddr{font-size:.42rem;color:var(--teal);word-break:break-all;line-height:1.5;font-family:var(--font);}
+.wcopy{background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:var(--font);font-size:.42rem;padding:.3rem .5rem;border-radius:4px;cursor:pointer;flex-shrink:0;white-space:nowrap;transition:all .2s;}
+.wcopy:hover{border-color:var(--teal);color:var(--teal);}
+.wcopy.ok{border-color:var(--teal);color:var(--teal);background:var(--teal-glow);}
+text-align:center;margin-top:2rem;padding-top:1.2rem;border-top:1px solid var(--border);font-size:.42rem;color:var(--text-ghost);line-height:2;letter-spacing:.08em;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- LANG BAR -->
+<div class="lang-bar" id="langBar"></div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="badge" id="t-badge">ApexKairos · Commercial Licensing</div>
+  <h1 id="t-title">Licensing <span>Calculator</span></h1>
+  <p id="t-desc">Estimate your commercial license fee. All percentages are indicative starting points — every enterprise agreement is negotiated individually.</p>
+</div>
+<div class="divider"></div>
+
+<!-- CONTROLS -->
+<div class="st" id="t-controls-title">Configure your profile</div>
+<div class="ctrl-grid">
+  <div class="ctrl-card">
+    <div class="ctrl-head">
+      <span class="ctrl-label" id="t-rev-label">Annual Revenue</span>
+      <span class="ctrl-val" id="valRev">€100,000</span>
+    </div>
+    <input type="range" id="slRev" min="0" max="100" value="20" step="1">
+    <div class="tick-row"><span>€10K</span><span>€500K</span><span>€5M</span><span>€50M+</span></div>
+  </div>
+  <div class="ctrl-card">
+    <div class="ctrl-head">
+      <span class="ctrl-label" id="t-type-label">Business Type</span>
+    </div>
+    <select id="selType">
+      <option value="startup">Startup / SME</option>
+      <option value="enterprise">Enterprise</option>
+      <option value="crypto">Crypto / Trading Firm</option>
+      <option value="fintech">Fintech / Hedge Fund</option>
+      <option value="agency">Agency / Consulting</option>
+      <option value="ngo">NGO / Non-profit</option>
+    </select>
+    <div style="margin-top:.8rem;font-size:.48rem;color:var(--text-ghost);line-height:1.7;" id="t-agents-note">
+      Agent modules are unlimited — you run as many as your hardware supports. License covers the system, not the count.
+    </div>
+  </div>
+</div>
+
+<!-- TIERS -->
+<div class="st" id="t-tiers-title">License tiers</div>
+<div class="tiers" id="tierGrid"></div>
+
+<!-- RESULT -->
+<div class="result">
+  <div class="result-main">
+    <div class="result-label" id="t-est-label">Estimated Annual License</div>
+    <div class="result-value" id="resVal">€2,000</div>
+    <div class="result-year" id="t-indicative">Indicative · Subject to negotiation</div>
+  </div>
+  <div class="result-grid">
+    <div class="rg">
+      <div class="rg-label" id="t-monthly">Monthly equivalent</div>
+      <div class="rg-val" style="color:var(--teal)" id="resMonthly">€167</div>
+    </div>
+    <div class="rg">
+      <div class="rg-label" id="t-pct">Applied rate</div>
+      <div class="rg-val" style="color:var(--gold)" id="resPct">2.0%</div>
+    </div>
+    <div class="rg">
+      <div class="rg-label" id="t-pool">Community pool (30%)</div>
+      <div class="rg-val" style="color:var(--purple)" id="resPool">€600</div>
+    </div>
+  </div>
+</div>
+
+<!-- DISTRIBUTION -->
+<div class="dist-card">
+  <h3 id="t-dist-title">How your license fee is distributed</h3>
+  <div class="dist-row">
+    <div>
+      <div style="color:var(--text)" id="t-d1">Author — Sven Budisa (Anomaly)</div>
+      <div class="dist-bar"><div class="dist-fill" style="width:70%;background:var(--teal)"></div></div>
+    </div>
+    <div style="color:var(--teal);font-weight:700;">70%</div>
+  </div>
+  <div class="dist-row">
+    <div>
+      <div style="color:var(--text)" id="t-d2">AING / airig.ai cooperative pool</div>
+      <div class="dist-bar"><div class="dist-fill" style="width:20%;background:var(--gold)"></div></div>
+    </div>
+    <div style="color:var(--gold);font-weight:700;">20%</div>
+  </div>
+  <div class="dist-row">
+    <div>
+      <div style="color:var(--text)" id="t-d3">Community contributors</div>
+      <div class="dist-bar"><div class="dist-fill" style="width:10%;background:var(--purple)"></div></div>
+    </div>
+    <div style="color:var(--purple);font-weight:700;">10%</div>
+  </div>
+</div>
+
+<!-- NOTE -->
+<div class="note" id="t-note">
+  <strong>Important:</strong> All percentages shown are indicative starting points based on market research. Every commercial agreement is negotiated individually. Startups with limited resources, NGOs, and early adopters may qualify for reduced rates or deferred payment structures. <strong>Contact us to discuss your specific situation.</strong>
+</div>
+
+<!-- CONTACT -->
+<div class="contact">
+  <p id="t-contact-desc">Ready to discuss a commercial agreement? Reach out through any channel below.</p>
+  <div class="contact-links">
+    <a class="cl" href="https://airig.ai" target="_blank">airig.ai</a>
+    <a class="cl" href="https://aing.ai" target="_blank">aing.ai</a>
+    <a class="cl" href="https://ko-fi.com/apexkairos" target="_blank">Ko-fi</a>
+    <a class="cl" href="https://github.com/aing-ai" target="_blank">GitHub</a>
+    <a class="cl" href="https://paypal.me/apexkairos" target="_blank">PayPal</a>
+  </div>
+</div>
+
+<div class="divider"></div>
+<div class="st" id="t-donate-title">Support the build — Crypto donations</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.5rem;" class="wgrid">
+
+  <div class="wcard"><div class="wicon" style="background:rgba(247,147,26,.1);border-color:rgba(247,147,26,.2);color:#f7931a;">₿</div><div class="winfo"><div class="wname">Bitcoin (BTC)</div><div class="waddr" id="w-btc">bc1qmp0tm3p6f7a2u8dcymkaygaj80sy32346n30f6</div></div><button class="wcopy" onclick="cp('w-btc',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(98,126,234,.1);border-color:rgba(98,126,234,.2);color:#627eea;">Ξ</div><div class="winfo"><div class="wname">Ethereum (ETH)</div><div class="waddr" id="w-eth">0xa3a2af7ca6606d6d230b68fc288ec857e3fbdc5d</div></div><button class="wcopy" onclick="cp('w-eth',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(38,161,123,.1);border-color:rgba(38,161,123,.2);color:#26a17b;">₮</div><div class="winfo"><div class="wname">USDT (ERC-20)</div><div class="waddr" id="w-usdt">0xa3a2af7ca6606d6d230b68fc288ec857e3fbdc5d</div></div><button class="wcopy" onclick="cp('w-usdt',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(190,190,190,.08);border-color:rgba(190,190,190,.15);color:#aaa;">Ł</div><div class="winfo"><div class="wname">Litecoin (LTC)</div><div class="waddr" id="w-ltc" style="color:var(--text-dim)">ltc1q6lwtym807znd9mtqujjg9qmzhf0vtkn8et0xy7</div></div><button class="wcopy" onclick="cp('w-ltc',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(140,198,63,.1);border-color:rgba(140,198,63,.2);color:#8cc63f;">₿</div><div class="winfo"><div class="wname">Bitcoin Cash (BCH)</div><div class="waddr" id="w-bch" style="color:var(--text-dim)">qrllual2rrqzg03a6nht5fs7qynrpn4l5sksnj0jpa</div></div><button class="wcopy" onclick="cp('w-bch',this)">Copy</button></div>
+
+  <div class="wcard"><div class="wicon" style="background:rgba(50,134,82,.1);border-color:rgba(50,134,82,.2);color:#328652;">⟠</div><div class="winfo"><div class="wname">Ethereum Classic (ETC)</div><div class="waddr" id="w-etc" style="color:var(--text-dim)">0x9445c241240bbd4a9a9ece2c5786d14f9cd8e0b4</div></div><button class="wcopy" onclick="cp('w-etc',this)">Copy</button></div>
+
+</div>
+
+<div class="footer" id="t-footer">
+  Sven Budisa (Anomaly / One) · Banja Luka, Bosnia and Herzegovina · AING.ai 2014 · airig.ai 2026 · ApexKairos 2026<br>
+  SHA256 timestamped · Bitcoin OTS verified · "From fracture, form."
+</div>
+
+</div>
+
+<script>
+function cp(id,btn){
+  const t=document.getElementById(id).textContent.trim();
+  navigator.clipboard.writeText(t).then(()=>{
+    btn.textContent='✓';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2000);
+  });
+}
+
+// ── TRANSLATIONS ──────────────────────────────────────────────
+const T={
+  en:{flag:'🇬🇧',name:'English',badge:'ApexKairos · Commercial Licensing',title:'Licensing',titleSpan:'Calculator',desc:'Estimate your commercial license fee. All percentages are indicative starting points — every enterprise agreement is negotiated individually.',cTitle:'Configure your profile',revLabel:'Annual Revenue',typeLabel:'Business Type',agentsNote:'Agent modules are unlimited — you run as many as your hardware supports. License covers the system, not the count.',tiersTitle:'License tiers',estLabel:'Estimated Annual License',indicative:'Indicative · Subject to negotiation',monthly:'Monthly equivalent',pct:'Applied rate',pool:'Community pool (30%)',distTitle:'How your license fee is distributed',d1:'Author — Sven Budisa (Anomaly)',d2:'AING / airig.ai cooperative pool',d3:'Community contributors',note:'<strong>Important:</strong> All percentages shown are indicative starting points based on market research. Every commercial agreement is negotiated individually. Startups, NGOs, and early adopters may qualify for reduced rates. <strong>Contact us to discuss your specific situation.</strong>',contactDesc:'Ready to discuss a commercial agreement? Reach out through any channel below.',footer:'Sven Budisa (Anomaly / One) · Banja Luka, Bosnia and Herzegovina · AING.ai 2014 · "From fracture, form."',types:{startup:'Startup / SME',enterprise:'Enterprise',crypto:'Crypto / Trading Firm',fintech:'Fintech / Hedge Fund',agency:'Agency / Consulting',ngo:'NGO / Non-profit'},tierNames:['Startup','SME','Enterprise','Custom'],tierRanges:['< €100K revenue','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['Basic usage, limited agents','Full deployment, all features','Priority support, custom config','Negotiated individually'],},
+  bs:{flag:'🇧🇦',name:'Bosanski',badge:'ApexKairos · Komercijalne Licence',title:'Kalkulator',titleSpan:'Licenciranja',desc:'Procijenite vašu komercijalnu licencu. Svi procenti su indikativni — svaki enterprise dogovor se pregovara individualno.',cTitle:'Konfiguriši profil',revLabel:'Godišnji prihod',typeLabel:'Tip biznisa',agentsLabel:'Agent moduli',tiersTitle:'Licence nivoi',estLabel:'Procijenjeni godišnji trošak',indicative:'Indikativno · Podložno pregovorima',monthly:'Mjesečni ekvivalent',pct:'Primijenjeni postotak',pool:'Kooperativni bazen (30%)',distTitle:'Raspodjela naknade za licencu',d1:'Autor — Sven Budisa (Anomaly)',d2:'AING / airig.ai kooperativni fond',d3:'Kontributori zajednice',note:'<strong>Napomena:</strong> Svi prikazani procenti su indikativni i temelje se na istraživanju tržišta. Svaki komercijalni ugovor se pregovara individualno. Startupi, NGO-i i rani korisnici mogu ostvariti povoljnije uvjete. <strong>Kontaktirajte nas.</strong>',contactDesc:'Spremi za diskusiju o komercijalnom ugovoru? Javite se putem bilo kojeg kanala.',footer:'Sven Budisa (Anomaly / One) · Banja Luka, BiH · AING.ai 2014 · "Od haosa — forma."',types:{startup:'Startup / MSP',enterprise:'Enterprise',crypto:'Kripto / Trading firma',fintech:'Fintech / Hedge fond',agency:'Agencija / Konzalting',ngo:'NGO / Neprofitna org.'},tierNames:['Startup','MSP','Enterprise','Custom'],tierRanges:['< €100K prihoda','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['Osnovna upotreba','Puna implementacija','Prioritetna podrška','Pregovori individualno'],},
+  de:{flag:'🇩🇪',name:'Deutsch',badge:'ApexKairos · Kommerzielle Lizenzierung',title:'Lizenz',titleSpan:'Kalkulator',desc:'Schätzen Sie Ihre kommerzielle Lizenzgebühr. Alle Prozentsätze sind Richtwerte — jeder Enterprise-Vertrag wird individuell verhandelt.',cTitle:'Profil konfigurieren',revLabel:'Jahresumsatz',typeLabel:'Unternehmenstyp',agentsLabel:'Agent-Module',tiersTitle:'Lizenzstufen',estLabel:'Geschätzte Jahreslizenz',indicative:'Indikativ · Verhandelbar',monthly:'Monatliches Äquivalent',pct:'Angewandter Satz',pool:'Gemeinschaftspool (30%)',distTitle:'Verteilung der Lizenzgebühr',d1:'Autor — Sven Budisa (Anomaly)',d2:'AING / airig.ai Kooperationsfonds',d3:'Community-Beitragende',note:'<strong>Hinweis:</strong> Alle Prozentsätze sind Richtwerte basierend auf Marktforschung. Jeder Vertrag wird individuell verhandelt. Startups und NGOs können von reduzierten Sätzen profitieren. <strong>Kontaktieren Sie uns.</strong>',contactDesc:'Bereit, einen kommerziellen Vertrag zu besprechen?',footer:'Sven Budisa (Anomaly / One) · Banja Luka, BiH · AING.ai 2014 · "Aus dem Bruch — Form."',types:{startup:'Startup / KMU',enterprise:'Enterprise',crypto:'Krypto / Handelsfirma',fintech:'Fintech / Hedgefonds',agency:'Agentur / Beratung',ngo:'NGO / Non-Profit'},tierNames:['Startup','KMU','Enterprise','Custom'],tierRanges:['< €100K Umsatz','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['Basisnutzung','Volle Implementierung','Prioritäts-Support','Individuell verhandelt'],},
+  fr:{flag:'🇫🇷',name:'Français',badge:'ApexKairos · Licences Commerciales',title:'Calculateur',titleSpan:'de Licence',desc:'Estimez votre frais de licence commerciale. Tous les pourcentages sont indicatifs — chaque accord enterprise est négocié individuellement.',cTitle:'Configurer votre profil',revLabel:'Chiffre d\'affaires annuel',typeLabel:'Type d\'entreprise',agentsLabel:'Modules agents',tiersTitle:'Niveaux de licence',estLabel:'Licence annuelle estimée',indicative:'Indicatif · Sous réserve de négociation',monthly:'Équivalent mensuel',pct:'Taux appliqué',pool:'Pool communautaire (30%)',distTitle:'Distribution des frais de licence',d1:'Auteur — Sven Budisa (Anomaly)',d2:'Fonds coopératif AING / airig.ai',d3:'Contributeurs communautaires',note:'<strong>Important:</strong> Tous les pourcentages sont des points de départ indicatifs. Chaque accord commercial est négocié individuellement. <strong>Contactez-nous pour discuter.</strong>',contactDesc:'Prêt à discuter d\'un accord commercial?',footer:'Sven Budisa (Anomaly / One) · Banja Luka, BiH · AING.ai 2014 · "Du chaos — la forme."',types:{startup:'Startup / PME',enterprise:'Enterprise',crypto:'Crypto / Firm Trading',fintech:'Fintech / Hedge Fund',agency:'Agence / Conseil',ngo:'ONG / Non-lucratif'},tierNames:['Startup','PME','Enterprise','Custom'],tierRanges:['< €100K CA','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['Usage basique','Déploiement complet','Support prioritaire','Négocié individuellement'],},
+  es:{flag:'🇪🇸',name:'Español',badge:'ApexKairos · Licencias Comerciales',title:'Calculadora',titleSpan:'de Licencia',desc:'Estime su tarifa de licencia comercial. Todos los porcentajes son indicativos — cada acuerdo empresarial se negocia individualmente.',cTitle:'Configurar su perfil',revLabel:'Ingresos anuales',typeLabel:'Tipo de empresa',agentsLabel:'Módulos de agentes',tiersTitle:'Niveles de licencia',estLabel:'Licencia anual estimada',indicative:'Indicativo · Sujeto a negociación',monthly:'Equivalente mensual',pct:'Tasa aplicada',pool:'Pool comunitario (30%)',distTitle:'Distribución de la tarifa de licencia',d1:'Autor — Sven Budisa (Anomaly)',d2:'Fondo cooperativo AING / airig.ai',d3:'Contribuidores comunitarios',note:'<strong>Importante:</strong> Todos los porcentajes son puntos de partida indicativos. Cada acuerdo comercial se negocia individualmente. <strong>Contáctenos para discutir su situación.</strong>',contactDesc:'¿Listo para discutir un acuerdo comercial?',footer:'Sven Budisa (Anomaly / One) · Banja Luka, BiH · AING.ai 2014 · "Del caos — la forma."',types:{startup:'Startup / PYME',enterprise:'Enterprise',crypto:'Cripto / Firma de Trading',fintech:'Fintech / Hedge Fund',agency:'Agencia / Consultoría',ngo:'ONG / Sin ánimo de lucro'},tierNames:['Startup','PYME','Enterprise','Custom'],tierRanges:['< €100K ingresos','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['Uso básico','Implementación completa','Soporte prioritario','Negociado individualmente'],},
+  zh:{flag:'🇨🇳',name:'中文',badge:'ApexKairos · 商业授权',title:'许可',titleSpan:'计算器',desc:'估算您的商业许可费用。所有百分比仅供参考——每项企业协议均需单独协商。',cTitle:'配置您的档案',revLabel:'年收入',typeLabel:'业务类型',agentsLabel:'代理模块',tiersTitle:'许可级别',estLabel:'预计年度许可费',indicative:'仅供参考 · 价格可协商',monthly:'月度等值',pct:'适用费率',pool:'社区池（30%）',distTitle:'许可费分配',d1:'作者 — Sven Budisa（Anomaly）',d2:'AING / airig.ai 合作基金',d3:'社区贡献者',note:'<strong>重要说明：</strong>所有百分比均为基于市场研究的参考起点。每项商业协议均需单独协商。初创企业和非政府组织可能符合优惠条件。<strong>请联系我们讨论您的具体情况。</strong>',contactDesc:'准备好讨论商业协议了吗？请通过以下任何渠道联系我们。',footer:'Sven Budisa（Anomaly / One）· 班亚卢卡，波黑 · AING.ai 2014 · "从裂缝中，成形。"',types:{startup:'初创企业 / 中小企业',enterprise:'大型企业',crypto:'加密货币 / 交易公司',fintech:'金融科技 / 对冲基金',agency:'代理机构 / 咨询',ngo:'非政府组织 / 非营利'},tierNames:['初创','中小企业','企业级','定制'],tierRanges:['< €10万收入','€10万 – €100万','€100万 – €1000万','€1000万以上'],tierNotes:['基础使用','完整部署','优先支持','单独协商'],},
+  hi:{flag:'🇮🇳',name:'हिन्दी',badge:'ApexKairos · वाणिज्यिक लाइसेंसिंग',title:'लाइसेंस',titleSpan:'कैलकुलेटर',desc:'अपनी वाणिज्यिक लाइसेंस फीस का अनुमान लगाएं। सभी प्रतिशत सांकेतिक हैं — हर एंटरप्राइज़ समझौता व्यक्तिगत रूप से बातचीत की जाती है।',cTitle:'अपनी प्रोफ़ाइल कॉन्फ़िगर करें',revLabel:'वार्षिक राजस्व',typeLabel:'व्यवसाय का प्रकार',agentsLabel:'एजेंट मॉड्यूल',tiersTitle:'लाइसेंस स्तर',estLabel:'अनुमानित वार्षिक लाइसेंस',indicative:'सांकेतिक · बातचीत के अधीन',monthly:'मासिक समकक्ष',pct:'लागू दर',pool:'समुदाय पूल (30%)',distTitle:'लाइसेंस शुल्क वितरण',d1:'लेखक — Sven Budisa (Anomaly)',d2:'AING / airig.ai सहकारी निधि',d3:'सामुदायिक योगदानकर्ता',note:'<strong>महत्वपूर्ण:</strong> सभी प्रतिशत बाजार अनुसंधान पर आधारित सांकेतिक आरंभिक बिंदु हैं। हर वाणिज्यिक समझौता व्यक्तिगत रूप से बातचीत की जाती है। <strong>अपनी स्थिति पर चर्चा करने के लिए हमसे संपर्क करें।</strong>',contactDesc:'वाणिज्यिक समझौते पर चर्चा करने के लिए तैयार हैं?',footer:'Sven Budisa (Anomaly / One) · बान्या लुका, बोस्निया · AING.ai 2014 · "टूट से, रूप।"',types:{startup:'स्टार्टअप / SME',enterprise:'एंटरप्राइज़',crypto:'क्रिप्टो / ट्रेडिंग फर्म',fintech:'फिनटेक / हेज फंड',agency:'एजेंसी / परामर्श',ngo:'NGO / गैर-लाभकारी'},tierNames:['स्टार्टअप','SME','एंटरप्राइज़','कस्टम'],tierRanges:['< €1 लाख राजस्व','€1-10 लाख','€10 लाख – €1 करोड़','€1 करोड़+'],tierNotes:['बुनियादी उपयोग','पूर्ण तैनाती','प्राथमिकता समर्थन','व्यक्तिगत बातचीत'],},
+  ar:{flag:'🇦🇪',name:'العربية',badge:'ApexKairos · الترخيص التجاري',title:'حاسبة',titleSpan:'الترخيص',desc:'قدّر رسوم ترخيصك التجاري. جميع النسب المئوية استرشادية — يتم التفاوض على كل اتفاقية مؤسسية بشكل فردي.',cTitle:'تكوين ملفك الشخصي',revLabel:'الإيرادات السنوية',typeLabel:'نوع الأعمال',agentsLabel:'وحدات الوكيل',tiersTitle:'مستويات الترخيص',estLabel:'الترخيص السنوي المقدر',indicative:'استرشادي · خاضع للتفاوض',monthly:'ما يعادله شهرياً',pct:'المعدل المطبق',pool:'مجموعة المجتمع (30%)',distTitle:'توزيع رسوم الترخيص',d1:'المؤلف — Sven Budisa (Anomaly)',d2:'صندوق AING / airig.ai التعاوني',d3:'مساهمو المجتمع',note:'<strong>ملاحظة:</strong> جميع النسب المئوية نقاط بداية استرشادية. يتم التفاوض على كل اتفاقية تجارية بشكل فردي. <strong>تواصل معنا لمناقشة وضعك.</strong>',contactDesc:'هل أنت مستعد لمناقشة اتفاقية تجارية؟',footer:'.Sven Budisa (Anomaly / One) · بانيا لوكا، البوسنة · AING.ai 2014 · "من الكسر — شكل"',types:{startup:'شركة ناشئة / متوسطة',enterprise:'مؤسسي',crypto:'تداول العملات المشفرة',fintech:'تقنية مالية / صندوق تحوط',agency:'وكالة / استشارات',ngo:'منظمة غير حكومية'},tierNames:['ناشئة','متوسطة','مؤسسي','مخصص'],tierRanges:['< €100K إيرادات','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['استخدام أساسي','نشر كامل','دعم أولوي','تفاوض فردي'],},
+  pt:{flag:'🇧🇷',name:'Português',badge:'ApexKairos · Licenciamento Comercial',title:'Calculadora',titleSpan:'de Licença',desc:'Estime sua taxa de licença comercial. Todas as percentagens são indicativas — cada acordo empresarial é negociado individualmente.',cTitle:'Configurar seu perfil',revLabel:'Receita anual',typeLabel:'Tipo de negócio',agentsLabel:'Módulos de agentes',tiersTitle:'Níveis de licença',estLabel:'Licença anual estimada',indicative:'Indicativo · Sujeito a negociação',monthly:'Equivalente mensal',pct:'Taxa aplicada',pool:'Pool comunitário (30%)',distTitle:'Distribuição da taxa de licença',d1:'Autor — Sven Budisa (Anomaly)',d2:'Fundo cooperativo AING / airig.ai',d3:'Contribuidores da comunidade',note:'<strong>Importante:</strong> Todas as percentagens são pontos de partida indicativos. Cada acordo comercial é negociado individualmente. <strong>Entre em contato para discutir sua situação.</strong>',contactDesc:'Pronto para discutir um acordo comercial?',footer:'Sven Budisa (Anomaly / One) · Banja Luka, BiH · AING.ai 2014 · "Da fratura, forma."',types:{startup:'Startup / PME',enterprise:'Enterprise',crypto:'Cripto / Firma de Trading',fintech:'Fintech / Hedge Fund',agency:'Agência / Consultoria',ngo:'ONG / Sem fins lucrativos'},tierNames:['Startup','PME','Enterprise','Custom'],tierRanges:['< €100K receita','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['Uso básico','Implementação completa','Suporte prioritário','Negociado individualmente'],},
+  ru:{flag:'🇷🇺',name:'Русский',badge:'ApexKairos · Коммерческое лицензирование',title:'Калькулятор',titleSpan:'лицензий',desc:'Оцените стоимость коммерческой лицензии. Все проценты ориентировочные — каждое корпоративное соглашение обсуждается индивидуально.',cTitle:'Настройте профиль',revLabel:'Годовой доход',typeLabel:'Тип бизнеса',agentsLabel:'Агентские модули',tiersTitle:'Уровни лицензий',estLabel:'Ориентировочная годовая лицензия',indicative:'Ориентировочно · Условия обсуждаются',monthly:'Ежемесячный эквивалент',pct:'Применяемая ставка',pool:'Общественный пул (30%)',distTitle:'Распределение лицензионного сбора',d1:'Автор — Sven Budisa (Anomaly)',d2:'Кооперативный фонд AING / airig.ai',d3:'Участники сообщества',note:'<strong>Важно:</strong> Все проценты являются ориентировочными отправными точками. Каждое коммерческое соглашение обсуждается индивидуально. <strong>Свяжитесь с нами для обсуждения.</strong>',contactDesc:'Готовы обсудить коммерческое соглашение?',footer:'Sven Budisa (Anomaly / One) · Баня-Лука, Босния · AING.ai 2014 · «Из хаоса — форма.»',types:{startup:'Стартап / МСП',enterprise:'Корпоративный',crypto:'Крипто / Трейдинговая фирма',fintech:'Финтех / Хедж-фонд',agency:'Агентство / Консалтинг',ngo:'НКО / Некоммерческая'},tierNames:['Стартап','МСП','Корпоративный','Кастомный'],tierRanges:['< €100K дохода','€100K – €1M','€1M – €10M','€10M+'],tierNotes:['Базовое использование','Полное развёртывание','Приоритетная поддержка','Индивидуально'],},
+  ja:{flag:'🇯🇵',name:'日本語',badge:'ApexKairos · 商業ライセンス',title:'ライセンス',titleSpan:'計算機',desc:'商業ライセンス料の見積もり。すべてのパーセンテージは参考値です — エンタープライズ契約は個別に交渉されます。',cTitle:'プロファイルを設定',revLabel:'年間収益',typeLabel:'ビジネスタイプ',agentsLabel:'エージェントモジュール',tiersTitle:'ライセンスティア',estLabel:'年間ライセンス見積もり',indicative:'参考値 · 交渉次第',monthly:'月額換算',pct:'適用レート',pool:'コミュニティプール（30%）',distTitle:'ライセンス料の分配',d1:'著者 — Sven Budisa（Anomaly）',d2:'AING / airig.ai 協同基金',d3:'コミュニティ貢献者',note:'<strong>重要：</strong>すべてのパーセンテージは市場調査に基づく参考値です。すべての商業契約は個別に交渉されます。<strong>詳細についてはお問い合わせください。</strong>',contactDesc:'商業契約について話し合う準備ができていますか？',footer:'Sven Budisa（Anomaly / One）· バニャルカ、ボスニア · AING.ai 2014 · 「破壊から、形へ。」',types:{startup:'スタートアップ / SME',enterprise:'エンタープライズ',crypto:'暗号通貨 / トレーディング会社',fintech:'フィンテック / ヘッジファンド',agency:'エージェンシー / コンサルティング',ngo:'NGO / 非営利'},tierNames:['スタートアップ','SME','エンタープライズ','カスタム'],tierRanges:['< €10万収益','€10万 – €100万','€100万 – €1,000万','€1,000万以上'],tierNotes:['基本利用','フル導入','優先サポート','個別交渉'],},
+};
+
+// ── State ─────────────────────────────────────────────────────
+let lang='en';
+let revenue=100000;
+let bizType='startup';
+let agents=6;
+
+// Revenue scale: 0-100 slider → actual values
+function sliderToRev(v){
+  if(v<=20) return 10000+v*4500;
+  if(v<=50) return 100000+(v-20)*13000;
+  if(v<=80) return 490000+(v-50)*30000;
+  return 1390000+(v-80)*2430500;
+}
+
+function fmtRev(v){
+  if(v>=1000000) return '€'+(v/1000000).toFixed(1)+'M';
+  if(v>=1000) return '€'+(v/1000).toFixed(0)+'K';
+  return '€'+v;
+}
+function fmtCur(v){
+  if(v>=1000000) return '€'+(v/1000000).toFixed(2)+'M';
+  if(v>=1000) return '€'+(v/1000).toFixed(1)+'K';
+  return '€'+Math.round(v);
+}
+
+// ── Tier config ───────────────────────────────────────────────
+const TIERS=[
+  {pct:0.02,gold:false},
+  {pct:0.03,gold:false},
+  {pct:0.045,gold:true},
+  {pct:null,gold:true},
+];
+
+function getTier(rev,type){
+  if(type==='ngo') return {tier:0,pct:0.01,custom:false};
+  if(rev<100000) return {tier:0,pct:0.02,custom:false};
+  if(rev<1000000) return {tier:1,pct:0.03,custom:false};
+  if(rev<10000000){
+    const basePct=type==='crypto'||type==='fintech'?0.05:0.045;
+    return {tier:2,pct:basePct,custom:false};
+  }
+  return {tier:3,pct:null,custom:true};
+}
+
+function agentMultiplier(a){
+  return 0.6+0.4*(a/18);
+}
+
+// ── Render lang bar ───────────────────────────────────────────
+function renderLangBar(){
+  const bar=document.getElementById('langBar');
+  bar.innerHTML=Object.entries(T).map(([k,v])=>
+    `<button class="lang-btn ${k===lang?'active':''}" onclick="setLang('${k}')">
+      <span class="flag">${v.flag}</span>${v.name}
+    </button>`
+  ).join('');
+}
+
+// ── Apply translations ────────────────────────────────────────
+function applyLang(l){
+  const t=T[l];
+  const setT=(id,html)=>{const e=document.getElementById(id);if(e)e.innerHTML=html;};
+  setT('t-badge',t.badge);
+  const h=document.getElementById('t-title');
+  if(h) h.innerHTML=t.title+' <span>'+t.titleSpan+'</span>';
+  setT('t-desc',t.desc);
+  setT('t-controls-title',t.cTitle);
+  setT('t-rev-label',t.revLabel);
+  setT('t-type-label',t.typeLabel);
+  setT('t-agents-note',t.agentsNote||'Agent modules are unlimited — you run as many as your hardware supports.');
+  setT('t-tiers-title',t.tiersTitle);
+  setT('t-est-label',t.estLabel);
+  setT('t-indicative',t.indicative);
+  setT('t-monthly',t.monthly);
+  setT('t-pct',t.pct);
+  setT('t-pool',t.pool);
+  setT('t-dist-title',t.distTitle);
+  setT('t-d1',t.d1);
+  setT('t-d2',t.d2);
+  setT('t-d3',t.d3);
+  setT('t-note',t.note);
+  setT('t-contact-desc',t.contactDesc);
+  setT('t-footer',t.footer);
+
+  // Update select options
+  const sel=document.getElementById('selType');
+  if(sel){
+    const keys=['startup','enterprise','crypto','fintech','agency','ngo'];
+    Array.from(sel.options).forEach((o,i)=>{o.text=t.types[keys[i]]||o.text;});
+  }
+
+  renderTiers();
+}
+
+function setLang(l){
+  lang=l;
+  renderLangBar();
+  applyLang(l);
+  calculate();
+}
+
+// ── Render tiers ──────────────────────────────────────────────
+function renderTiers(){
+  const t=T[lang];
+  const grid=document.getElementById('tierGrid');
+  const {tier:active}=getTier(revenue,bizType);
+  grid.innerHTML=TIERS.map((tr,i)=>`
+    <div class="tier ${i===active?'active':''} ${tr.gold&&i===active?'gold-t':''}">
+      <div class="tier-name">${t.tierNames[i]}</div>
+      <div class="tier-range">${t.tierRanges[i]}</div>
+      <div class="tier-pct">${tr.pct?Math.round(tr.pct*100)+'%':'*'}</div>
+      <div class="tier-note">${t.tierNotes[i]}</div>
+      ${i===3?`<div class="tier-custom">${t.indicative}</div>`:''}
+    </div>
+  `).join('');
+}
+
+// ── Calculate ─────────────────────────────────────────────────
+function calculate(){
+  const{tier,pct,custom}=getTier(revenue,bizType);
+  const annual=custom?null:Math.round(revenue*pct);
+  const monthly=annual?Math.round(annual/12):null;
+  const pool=annual?Math.round(annual*0.30):null;
+
+  const rv=document.getElementById('resVal');
+  const rm=document.getElementById('resMonthly');
+  const rp=document.getElementById('resPct');
+  const rpool=document.getElementById('resPool');
+
+  if(custom){
+    rv.textContent='Custom';rv.style.fontSize='2.5rem';
+    rm.textContent='—';rp.textContent='Negotiated';rpool.textContent='—';
+  } else {
+    rv.textContent=fmtCur(annual);rv.style.fontSize='';
+    rm.textContent=fmtCur(monthly);
+    rp.textContent=(pct*100).toFixed(1)+'%';
+    rpool.textContent=fmtCur(pool);
+  }
+
+  renderTiers();
+}
+
+// ── Events ────────────────────────────────────────────────────
+document.getElementById('slRev').addEventListener('input',function(){
+  revenue=sliderToRev(parseInt(this.value));
+  document.getElementById('valRev').textContent=fmtRev(revenue);
+  calculate();
+});
+
+document.getElementById('selType').addEventListener('change',function(){
+  bizType=this.value;calculate();
+});
+
+// ── Init ──────────────────────────────────────────────────────
+renderLangBar();
+applyLang('en');
+calculate();
+</script>
+</body>
+</html>
